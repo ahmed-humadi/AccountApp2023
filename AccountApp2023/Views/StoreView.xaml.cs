@@ -22,11 +22,12 @@ namespace AccountApp2023.Views
     /// </summary>
     public partial class StoreView : UserControl
     {
-
         public StoreViewModel StoreViewModel { get; set; }
         public StoreView()
         {
+            StoreViewModel = new StoreViewModel();
             InitializeComponent();
+            this.DataContext = this;
         }
     }
 }

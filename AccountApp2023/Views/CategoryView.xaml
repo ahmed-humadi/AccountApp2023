@@ -57,13 +57,14 @@
                  Margin="120,0,0,0"
                  Text="{Binding categoryViewModel.CategoryName}"/>
         <ListView x:Name="listView"  Grid.Row="2"
-                                  Margin="5,0,300,0"
+                                  Margin="5,0,465,0"
                                   VerticalAlignment="Stretch"
                                   VerticalContentAlignment="Stretch"
                                   ItemsSource="{Binding categoryViewModel.CategoryTable.DefaultView}"
                                   ScrollViewer.CanContentScroll="False"
                                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                  >
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"                
+                  >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction
@@ -85,7 +86,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <!--UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/-->
+        <UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/>
 
     </Grid>
 </UserControl>

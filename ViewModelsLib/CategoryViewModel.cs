@@ -37,13 +37,13 @@ namespace ViewModelsLib
             }
         }
 
-        private bool iSLoading;
-        public bool ISLoading
+        private bool isLoading;
+        public bool IsLoading
         {
-            get => iSLoading;
+            get => isLoading;
             set
             {
-                SetProperty(ref iSLoading, value);
+                SetProperty(ref isLoading, value);
             }
         }
         private CategoryTable categoryTable;
@@ -116,14 +116,21 @@ namespace ViewModelsLib
 
             }
         }
-        private void Save()
+        private async void Save()
         {
             try
             {
-
-                categoryModel.UpdateCategoryTable(this.CategoryTable);
-                this.CategoryTable.AcceptChanges();
-
+                IsLoading = true;
+                await Task.Run(() =>
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        categoryModel.UpdateCategoryTable(this.CategoryTable);
+                        this.CategoryTable.AcceptChanges();
+                    });
+                });
+                IsSaving = false;
+                IsEditing = false;
                 MessageBox.Show("تم الحفظ");
             }
             catch(Exception ex)
@@ -132,8 +139,7 @@ namespace ViewModelsLib
             }
             finally
             {
-                IsSaving = false;
-                IsEditing = false;
+                IsLoading = false;
             }
         }
         private void Modify()
@@ -197,7 +203,7 @@ namespace ViewModelsLib
         {
             try
             {
-                ISLoading = true;
+                IsLoading = true;
                 IsSaving = false;
                 isEditing = true;
                 await Task.Run(() =>
@@ -209,8 +215,7 @@ namespace ViewModelsLib
                     });
 
                 });
-                await Task.Delay(1000);
-                ISLoading = false;
+                IsLoading = false;
             }
             catch (Exception ex)
             {
@@ -218,7 +223,7 @@ namespace ViewModelsLib
             }
             finally
             {
-                ISLoading = false;
+                IsLoading = false;
             }
         }
     }

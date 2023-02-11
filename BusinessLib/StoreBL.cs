@@ -41,7 +41,7 @@ namespace BusinessLib
         {
 
             StoreTable storeTable = new StoreTable();
-            DataAccess.ExecuteQueryCommand($"Select * From Category", CommandType.Text);
+            DataAccess.ExecuteQueryCommand($"Select * From Store", CommandType.Text);
             DataAccess.OpenSqlConnection();
             IDataReader dataReader = DataAccess.DataReader();
 

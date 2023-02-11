@@ -78,8 +78,18 @@ namespace AccountApp2023
                 {
                     ShowCatogryTableView(tabItem);
                 }
+                else if (menuItem.Name.Equals("SideMenu_MenuItem_42_Display"))
+                {
+                    ShowStoreTableView(tabItem);
+                }
             }
         }
+
+        private void ShowStoreTableView(TabItem tabItem)
+        {
+            tabItem.Content = new StoreView();
+        }
+
         private void TabItem_CloseBtn_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("هل تريد أغلاق النافذة", "أغلاق", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)

@@ -16,40 +16,75 @@
                 Command="{Binding categoryViewModel.LoadedCategoryViewCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <Border BorderBrush="WhiteSmoke" BorderThickness="2" CornerRadius='10'
-            Background="White">
-        <Grid Background="Transparent">
+
+    
+
+    <Grid Background="White">
+
         <Grid.RowDefinitions>
             <RowDefinition x:Name="menu" Height="25"/>
             <RowDefinition x:Name="flieds" Height="60"/>
-            <RowDefinition x:Name="dataGrid" Height="*"/>
+            <RowDefinition x:Name="dataGrid"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="menuGrid" Grid.Row="0">
+        <Grid x:Name="menuGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition/>
+                <!--ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/-->
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
+
+            <!--Button Grid.Column="1"
+
                     Background="Transparent"
                     Content="ادراج"
                     Style="{StaticResource buttonsStyle}"
                     Command="{Binding categoryViewModel.InsertCommand}">
 
-            </Button>
-            <Button Grid.Column="1"
+                </Button>
+                <Button Grid.Column="2"
                     Style="{StaticResource buttonsStyle}"
                     Content="تعديل"
                     Command="{Binding categoryViewModel.ModCommand}">
 
-            </Button>
-            <Button Grid.Column="2"
+                </Button>
+                <Button Grid.Column="3"
                     Style="{StaticResource buttonsStyle}"
                     Content="حفظ"
                     Command="{Binding categoryViewModel.SaveCommand}">
 
-            </Button>
+                </Button-->
+            <Menu>
+                <MenuItem x:Name="AllAccountInsert" Command="{Binding categoryViewModel.InsertCommand}"
+                                  >
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="ادراج  "/>
+                            <TextBlock FontSize="12" Text="&#xE1FD;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem x:Name="AllAccountMod" Command="{Binding categoryViewModel.ModCommand}"
+                                  >
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="تعديل  "/>
+                            <TextBlock FontSize="12" Text="&#xE2B3;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem Command="{Binding categoryViewModel.SaveCommand}">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="حفظ  "/>
+                            <TextBlock FontSize="12" Text="&#xE105;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
         </Grid>
         <TextBlock Grid.Row="1" Width="100" Margin="10"
                    Height="20" HorizontalAlignment="Left"
@@ -75,21 +110,36 @@
                     </i:InvokeCommandAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <VirtualizingStackPanel/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="Foreground" Value="Black"/>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.View>
                 <GridView>
+                    <GridView.ColumnHeaderContainerStyle>
+                        <Style TargetType="GridViewColumnHeader">
+                            <Setter Property="HorizontalContentAlignment"
+                            Value="Center" />
+                        </Style>
+                    </GridView.ColumnHeaderContainerStyle>
                     <GridViewColumn x:Name="ID" Header="رقم المجموعة" Width="270"
-                                    
                                                     DisplayMemberBinding="{Binding ID}"/>
-                    
                     <GridViewColumn Header="اسم المجموعة" Width="400"
                                                     DisplayMemberBinding="{Binding Name}"/>
-                    
+                  
 
                 </GridView>
             </ListView.View>
         </ListView>
-        <UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/>
+        <!--UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/-->
 
     </Grid>
-    </Border>
+    
 </UserControl>

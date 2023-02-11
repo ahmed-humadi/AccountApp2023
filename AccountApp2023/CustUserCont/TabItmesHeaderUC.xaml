@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:AccountApp2023.CustUserCont"
-             mc:Ignorable="d" Height="auto" Width="auto" FlowDirection="RightToLeft">
-    <StackPanel Orientation="Horizontal">
-        <Button x:Name="TabItem_CloseBtn" Background="White" BorderBrush="Transparent">
+             mc:Ignorable="d" Height="auto" Width="auto" FlowDirection="RightToLeft"
+             Background="Transparent">
+    <StackPanel Orientation="Horizontal" Background="Transparent">
+        <Button x:Name="TabItem_CloseBtn" Background="Transparent" BorderBrush="Transparent">
             <Button.Content>
                         <TextBlock Text="&#xE10A;" FontFamily="Segoe MDL2 Assets"/>
             </Button.Content>

@@ -33,6 +33,46 @@ namespace BusinessLib
                 }
             }
         }
+        public List<Tuple<int, string>> GetStores1(string name)
+        {
+            DataAccess.ExecuteQueryCommand($"Select TOP 100 ID, Name From Store Where Name LIKE '%{name}%'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+
+            Tuple<int, string> tuple = null;
+
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<int, string>((int)dataReader[0],
+                    (string)dataReader[1]);
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
+        public List<Tuple<int, string>> GetStores1()
+        {
+            DataAccess.ExecuteQueryCommand($"Select Top 100 ID, Name From Store", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+            Tuple<int, string> tuple = null;
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<int, string>((int)dataReader[0],
+                    (string)dataReader[1]);
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
         /// <summary>
         /// get all categories
         /// </summary>

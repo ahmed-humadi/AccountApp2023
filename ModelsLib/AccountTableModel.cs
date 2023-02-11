@@ -14,9 +14,11 @@ namespace ModelsLib
     public class AccountTableModel
     {
         private AccountsBL accountsGuideBL;
+        private EndAccountsBL endAccountsGuideBL;
         public AccountTableModel()
         {
             accountsGuideBL = new AccountsBL();
+            endAccountsGuideBL = new EndAccountsBL();
         }
         /// <summary>
         ///  this method take a list and load it with acount 
@@ -26,7 +28,7 @@ namespace ModelsLib
         /// </summary>
         /// <param name="Accountstuples"></param>
         /// <param name="parentID"></param>
-        public void GetAccountsFromAccountTable(List<Tuple<string, int>> Accountstuples,int parentID)
+        public void GetAccountsFromAccountTable(List<Tuple<string, int>> Accountstuples, int parentID)
         {
             accountsGuideBL.GetAccounts(Accountstuples, parentID);
         }
@@ -63,7 +65,6 @@ namespace ModelsLib
         /// </summary>
         /// <param name="Accountstuples"></param>
         /// <param name="name"></param>
-        [Obsolete]
         public void GetAccountsFromAccountTable(List<Tuple<string, int>> Accountstuples, string name)
         {
             accountsGuideBL.GetAccounts(Accountstuples, name);
@@ -82,7 +83,7 @@ namespace ModelsLib
         /// </summary>
         /// <param name="Accountstuples"></param>
         /// <param name="id"></param>
-        public void GetAccountsFromAccountTable_ByID( ref Tuple<string, int> Accountstuples, int id)
+        public void GetAccountsFromAccountTable_ByID(ref Tuple<string, int> Accountstuples, int id)
         {
             accountsGuideBL.GetAccounts_ByID(ref Accountstuples, id);
         }
@@ -120,6 +121,26 @@ namespace ModelsLib
         public void UpdateAccountTable(AccountTable accoutTable)
         {
             accountsGuideBL.UpdateAccountTable(accoutTable);
+        }
+        public Tuple<string, int> GetAccount(string name)
+        {
+            return accountsGuideBL.GetAccount(name);
+        }
+        public void GetEndAccounts(List<Tuple<string, int>> accountsList)
+        {
+            endAccountsGuideBL.GetAccounts(accountsList);
+        }
+        public Tuple<string, int> GetEndAccount(string name)
+        {
+            return endAccountsGuideBL.GetAccount(name);
+        }
+        public void GetAccounts(AccountTable accountTable)
+        {
+            accountsGuideBL.GetAccounts(accountTable);
+        }
+        public void GetAccounts(AccountTable accountTable, string name)
+        {
+            accountsGuideBL.GetAccounts(accountTable, name);
         }
     }
 }

@@ -17,6 +17,8 @@ namespace DataEntitiesLib
 
         private DataColumn columnGroupID;
 
+        private DataColumn columnGroupName;
+
         private DataColumn columnNote;
        
         private DataColumn columnbalance;
@@ -26,6 +28,16 @@ namespace DataEntitiesLib
         private DataColumn columnunit;
                            
         private DataColumn columnmodDate;
+
+        private DataColumn columnbrand;
+
+        private DataColumn columnstate;
+
+        private DataColumn columnenglish;
+
+        private DataColumn columnstoreName;
+        
+        private DataColumn columnstoreID;
 
         private string[] columnsName;
         public ItemTable() // costum columns
@@ -54,8 +66,17 @@ namespace DataEntitiesLib
         public DataColumn ColumnBarCode { get => columnbarCode; set => columnbarCode = value; }
         public DataColumn ColumnUnit { get => columnunit; set => columnunit = value; }
         public DataColumn ColumnModDate { get => columnmodDate; set => columnmodDate = value; }
+        public DataColumn ColumnBrand { get => columnbrand; set => columnbrand = value; }
+        public DataColumn ColumnState { get => columnstate; set => columnstate = value; }
+        public DataColumn ColumnEnglish { get => columnenglish; set => columnenglish = value; }
+
         public int Count { get { return this.Rows.Count; } }
         public DataRowCollection ItemRows { get { return this.Rows; } }
+
+        public DataColumn ColumnGroupName { get => columnGroupName; set => columnGroupName = value; }
+        public DataColumn ColumnStoreID { get => columnstoreID; set => columnstoreID = value; }
+        public DataColumn ColumnStoreName { get => columnstoreName; set => columnstoreName = value; }
+
         public ItemRow this[int index]
         {
             get { return ((ItemRow)(this.Rows[index])); }
@@ -127,6 +148,18 @@ namespace DataEntitiesLib
                     // add column
                     this.columnGroupID = dataColumn;
                 }
+                else if (dataColumn.ColumnName == "GroupName")
+                {
+                    dataColumn.DataType = typeof(string);
+                    // set data Max length
+                    dataColumn.MaxLength = 500;
+                    // set allow null
+                    dataColumn.AllowDBNull = true;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.columnGroupName = dataColumn;
+                }
                 else if(dataColumn.ColumnName == "Note")
                 {
                     dataColumn.DataType = typeof(int);
@@ -142,6 +175,8 @@ namespace DataEntitiesLib
                 else if (dataColumn.ColumnName == "Balance")
                 {
                     dataColumn.DataType = typeof(double);
+                    // set data Max length
+                    dataColumn.MaxLength = -1;
                     // set allow null
                     dataColumn.AllowDBNull = false;
                     // set unique
@@ -182,6 +217,43 @@ namespace DataEntitiesLib
                     this.columnbalance = dataColumn;
                 }
 
+                }
+                else if (dataColumn.ColumnName == "EnglishName")
+                {
+                    dataColumn.DataType = typeof(string);
+                    //
+                    dataColumn.MaxLength = 500;
+                    // set allow null
+                    dataColumn.AllowDBNull = true;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.columnenglish = dataColumn;
+                }
+                else if (dataColumn.ColumnName == "StoreName")
+                {
+                    dataColumn.DataType = typeof(string);
+                    //
+                    dataColumn.MaxLength = 500;
+                    // set allow null
+                    dataColumn.AllowDBNull = true;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.columnenglish = dataColumn;
+                }
+                else if (dataColumn.ColumnName == "StoreID")
+                {
+                    dataColumn.DataType = typeof(int);
+                    //
+                    dataColumn.MaxLength = -1;
+                    // set allow null
+                    dataColumn.AllowDBNull = false;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.columnenglish = dataColumn;
+                }
             }
         }
         private void InitClassGeneric()
@@ -239,6 +311,17 @@ namespace DataEntitiesLib
             set
             {
                 this[this.table.ColumnGroupID] = value;
+            }
+        }
+        public string GroupName
+        {
+            get
+            {
+                return ((string)(this[this.table.ColumnGroupName]));
+            }
+            set
+            {
+                this[this.table.ColumnGroupName] = value;
             }
         }
         public int Code
@@ -306,6 +389,61 @@ namespace DataEntitiesLib
             set
             {
                 this[this.table.ColumnModDate] = value;
+            }
+        }
+        public string Brand
+        {
+            get
+            {
+                return ((string)(this[this.table.ColumnBrand]));
+            }
+            set
+            {
+                this[this.table.ColumnBrand] = value;
+            }
+        }
+        public string State
+        {
+            get
+            {
+                return ((string)(this[this.table.ColumnState]));
+            }
+            set
+            {
+                this[this.table.ColumnState] = value;
+            }
+        }
+        public string EnglishName
+        {
+            get
+            {
+                return ((string)(this[this.table.ColumnEnglish]));
+            }
+            set
+            {
+                this[this.table.ColumnEnglish] = value;
+            }
+        }
+        public string StoreName
+        {
+            get
+            {
+                return ((string)(this[this.table.ColumnStoreName]));
+            }
+            set
+            {
+                this[this.table.ColumnStoreName] = value;
+            }
+        }
+        public int StoreID
+        {
+            get
+            {
+                return ((int)(this[this.table.ColumnStoreID]));
+            }
+            set
+            {
+                this[this.table.ColumnStoreID] = value;
             }
         }
     }

@@ -46,12 +46,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountTableViewModel.cs" />
+    <Compile Include="AccountTableViewModel1.cs" />
+    <Compile Include="BillTableViewModel.cs" />
+    <Compile Include="BillTypeViewModel.cs" />
+    <Compile Include="CashDayViewModel.cs" />
     <Compile Include="CategoryViewModel.cs" />
+    <Compile Include="CostCenterViewModel.cs" />
+    <Compile Include="CurrencyTableViewModel.cs" />
     <Compile Include="DayTableViewModel.cs" />
+    <Compile Include="DayTableViewModel1.cs" />
     <Compile Include="EndAccountsViewModel.cs" />
     <Compile Include="ItemTableViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreViewModel.cs" />
+    <Compile Include="ViewModelEventArgs\ViewModelEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
@@ -65,6 +73,10 @@
     <ProjectReference Include="..\FrameWorkLib\FrameWorkLib.csproj">
       <Project>{667833d8-e53c-49ad-9615-7befd15779d2}</Project>
       <Name>FrameWorkLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelLib1\ModelsLib1.csproj">
+      <Project>{94ae5567-27da-4e49-8b21-f986c014e722}</Project>
+      <Name>ModelsLib1</Name>
     </ProjectReference>
     <ProjectReference Include="..\ModelsLib\ModelsLib.csproj">
       <Project>{65ec5cdd-ab90-4257-ab01-5b8a24d1a367}</Project>

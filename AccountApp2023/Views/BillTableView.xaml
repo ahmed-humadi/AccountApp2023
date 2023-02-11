@@ -1,0 +1,678 @@
+﻿<UserControl x:Class="AccountApp2023.Views.BillTableView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AccountApp2023.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:UC="clr-namespace:AccountApp2023.CustUserCont"
+             xmlns:viewModel="clr-namespace:ViewModelsLib;assembly=ViewModelsLib" xmlns:converter="clr-namespace:AccountApp2023.Converter"
+             xmlns:frameWorK="clr-namespace:FrameWorkLib;assembly=FrameWorkLib"
+             mc:Ignorable="d"
+             FlowDirection="RightToLeft"
+             d:DesignHeight="660" d:DesignWidth="900">
+    <UserControl.DataContext>
+        <viewModel:BillTableViewModel x:Name="billTableViewModel"/>
+    </UserControl.DataContext>
+    <UserControl.InputBindings>
+        <!--<KeyBinding Key="Return"
+               Command="{Binding ItemBarCodeSearchCommand}"
+                    
+                             />-->
+    </UserControl.InputBindings>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Unloaded">
+            <i:InvokeCommandAction Command="{Binding UnloadCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="ToBooleanConverter"/>
+        <converter:BooleanToVisibilityConverter1 x:Key="ToBooleanConverter1"/>
+    </UserControl.Resources>
+    <Grid Background="White"
+         >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!--menu-->
+        <Menu Grid.Row="0"
+              Style="{StaticResource MenuStyle}">
+            <MenuItem x:Name="AllAccountInsert"
+                      Command="{Binding NewCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="12" Text="&#xE1FD;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="جديد"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem
+                      Command="{Binding ModCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="12" Text=" &#xE2B3;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="تعديل"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem
+                      Command="{Binding DeleteCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="12" Text=" "  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="حذف"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem
+                      Command="{Binding SaveCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock FontSize="12" Text=" &#xE105;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="حفظ"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem
+                      Command="{Binding ShowAssociatedDayCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock FontSize="12" Text=" "  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="عرض سند القيد"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+            <MenuItem>
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="12" Text=" "  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="تكبير"/>
+                    </StackPanel>
+                </MenuItem.Header>
+                <!--Zoom IN-->
+                <MenuItem.Triggers>
+                    <EventTrigger RoutedEvent="MenuItem.Click">
+                        <BeginStoryboard >
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.Target="{Binding ElementName=movingGrid}"
+                                                 Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleX)"
+                                                 From="1" To="2"
+                                                 BeginTime="0:0:0.1"
+                                                  Duration="0:0:0.1">
+
+                                </DoubleAnimation>
+                            </Storyboard>
+
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MenuItem.Click">
+                        <BeginStoryboard >
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.Target="{Binding ElementName=movingGrid}"
+                                                 Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleY)"
+                                                 From="1" To="2"
+                                                 BeginTime="0:0:0.1"
+                                                  Duration="0:0:0.1">
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </MenuItem.Triggers>
+            </MenuItem>
+            <MenuItem>
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+
+                        <TextBlock FontSize="12" Text=" "  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="تصغير"/>
+                    </StackPanel>
+                </MenuItem.Header>
+                <!--Zoom OUT-->
+                <MenuItem.Triggers>
+                    <EventTrigger RoutedEvent="MenuItem.Click">
+                        <BeginStoryboard >
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.Target="{Binding ElementName=movingGrid}"
+                                                 Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleX)"
+                                                 From="2" To="1"
+                                                 BeginTime="0:0:0.1"
+                                                  Duration="0:0:0.1">
+
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MenuItem.Click">
+                        <BeginStoryboard >
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.Target="{Binding ElementName=movingGrid}"
+                                                 Storyboard.TargetProperty="LayoutTransform.(ScaleTransform.ScaleY)"
+                                                 From="2" To="1"
+                                                 BeginTime="0:0:0.1"
+                                                  Duration="0:0:0.1">
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </MenuItem.Triggers>
+            </MenuItem>
+        </Menu>
+        <!--Bill1 Fields-->
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <Grid x:Name="movingGrid"
+              ScrollViewer.CanContentScroll="False">
+                <Grid.LayoutTransform>
+                    <ScaleTransform ScaleX="1" ScaleY="1">
+                    </ScaleTransform>
+                </Grid.LayoutTransform>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="200*"/>
+                    <RowDefinition Height="350"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="40"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="9*"/>
+                        <ColumnDefinition Width="10*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="التاريــــــــــــــخ" Grid.Row="2" Grid.Column="1" 
+                               VerticalAlignment="Top"
+                               Margin="10,4,10,0" 
+                               Grid.ColumnSpan="2"/>
+                    <DatePicker Grid.Column="3" Grid.Row="2" Margin="0,0,0,5"
+                                Text="{Binding BillDate, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="اسم الحساب" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                               VerticalAlignment="Center" Margin="10,5,25,9"/>
+                    <!--Account ID to save it-->
+                    <TextBlock Grid.Row="4" Grid.Column="4"
+                               Text="{Binding SelectedBillAccountID, Mode=OneWay}"/>
+                    <UC:MyComboBox Grid.Row="4" Grid.Column="3" Margin="0,0,0,5"
+                                   BorderBrush="Gray"
+                                   frameWorK:FocusExtension.IsFocused="{Binding IsFirstTxtBxFocused, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                   Style="{StaticResource MyComboBoxStyleSearchable}"
+                                   IsEditable="True"
+                                   IsTextSearchEnabled="False"
+                                   Text="{Binding BillAccountName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                   SelectedItemID="{Binding SelectedBillAccountID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                   ItemsSource="{Binding BillAccountList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                   IsLoading="{Binding IsLoading_Account}"
+                               
+                                   IsDropDownOpen="{Binding BillAccountIsDropOpen}">
+
+                        <UC:MyComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </UC:MyComboBox.ItemsPanel>
+                        <i:Interaction.Triggers>
+
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding AccountNameSelectionChnagedCommand}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding AccountNameTextChangedCommand}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="SearchButtonClick">
+                                <i:InvokeCommandAction Command="{Binding AccountNameSearchCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <!--this to recieve data as tuples-->
+                        <ItemsControl.ItemTemplate>
+
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Item1}" Width="30"/>
+                                    <TextBlock Text="{Binding Item2}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </UC:MyComboBox>
+                    <TextBlock Grid.Row="3" Grid.Column="6"
+                               Text="{Binding SelectedBillStoreID, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock Text="المستودع" Grid.Row="4" Grid.Column="5" VerticalAlignment="Center" Margin="0,4,0,10"/>
+                    <UC:MyComboBox Grid.Row="4" Grid.Column="6" Margin="0,0,0,5"
+                                   BorderBrush="Gray"
+                                   Style="{StaticResource MyComboBoxStyleSearchable}"
+                                   IsEditable="True"
+                                   IsTextSearchEnabled="False"
+                                   Text="{Binding BillStoreName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                   SelectedItemID="{Binding SelectedBillStoreID,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                   ItemsSource="{Binding BillStoreList}"
+                                   IsLoading="{Binding IsLoading_Store}"
+                                   IsDropDownOpen="{Binding BillStoreIsDropOpen}">
+                        <UC:MyComboBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel/>
+                            </ItemsPanelTemplate>
+                        </UC:MyComboBox.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Item1}" Width="30"/>
+                                    <TextBlock Text="{Binding Item2}"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="SelectionChanged">
+                                <i:InvokeCommandAction Command="{Binding StoreNameSelectionChnagedCommand}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding StoreNameTextChangedCommand}"/>
+                            </i:EventTrigger>
+                            <i:EventTrigger EventName="SearchButtonClick">
+                                <i:InvokeCommandAction Command="{Binding StoreNameSearchCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </UC:MyComboBox>
+                    <TextBlock Text="الملاحظات" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBox Grid.Column="3" Grid.Row="6" Grid.ColumnSpan="4" 
+                           TextWrapping="Wrap"
+                             Text="{Binding BillNote, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                             Style="{StaticResource TextBoxStyle}"/>
+                    <!--Navigation user control-->
+                    <UserControl Grid.Column="5" Grid.Row="1" BorderThickness="1"
+                         Grid.ColumnSpan="3"   BorderBrush="LightGray" 
+                         VerticalAlignment="Stretch" Margin="0,0,10,5" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="70"/>
+                                <ColumnDefinition Width="70"/>
+                            </Grid.ColumnDefinitions>
+                            <Button Background="White" Grid.Column="0"
+                                BorderBrush="LightGray"
+                                Style="{StaticResource buttonsStyle}"
+                                Command="{Binding MaxCommand}">
+                                <Button.Content>
+                                    <TextBlock FontSize="12"  FontFamily="Segoe MDL2 Assets">
+                                    
+                                    </TextBlock>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="NextBtn" Background="White" Grid.Column="1"
+                              Style="{StaticResource buttonsStyle}"
+                                Command="{Binding NextCommand}"
+                               
+                                BorderBrush="LightGray">
+                                <Button.Content>
+                                    <TextBlock FontSize="12"  FontFamily="Segoe MDL2 Assets">
+                                    
+                                    </TextBlock>
+                                </Button.Content>
+                            </Button>
+                            <Grid Grid.Column="2" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Name="HidenBillID"
+                                    
+                                           Text="{Binding BillID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                           HorizontalAlignment="Left"
+                                           Width="50"/>
+                                <TextBox x:Name="DayIDTxtBx" Grid.Column="1"
+                                        BorderThickness="1" IsEnabled="True"
+                                            VerticalContentAlignment="Center"
+                                       frameWorK:FocusExtension.IsFocused="{Binding IsFirstContrlFocused,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        Text="{Binding BillNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                        
+                                         TextAlignment="Center"
+                                        Style="{StaticResource TextBoxStyle}">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction
+                                        Command="{Binding BillNumberTextChnagedCommand}">
+                                            </i:InvokeCommandAction>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                            </Grid>
+                            <Button Background="White" Grid.Column="4"
+                              Style="{StaticResource buttonsStyle}"
+                                BorderBrush="LightGray"
+                                Command="{Binding MinCommand}">
+
+                                <Button.Content>
+                                    <TextBlock FontSize="12"  FontFamily="Segoe MDL2 Assets">
+                                    
+                                    </TextBlock>
+                                </Button.Content>
+                            </Button>
+                            <Button x:Name="PrevBtn" Background="White" Grid.Column="3"
+                                Style="{StaticResource buttonsStyle}"
+                                BorderBrush="LightGray"
+                                Command="{Binding PreviousCommand}"
+                                >
+                                <Button.Content>
+                                    <TextBlock FontSize="12"  FontFamily="Segoe MDL2 Assets">
+                                    
+                                    </TextBlock>
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                    </UserControl>
+                    <TextBlock Grid.Row="4" Grid.Column="7"
+                              
+                               Text="الدفع" VerticalAlignment="Center" Margin="12,5,0,9" HorizontalAlignment="Left" Width="35" Height="16"/>
+                    <ComboBox Grid.Row="4" Grid.Column="7" 
+                              Margin="65,0,12,5"
+                              VerticalContentAlignment="Center"
+                              IsEditable="True" 
+                              Text ="{Binding BillPaymentType, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBoxItem>
+                            نقدي
+                        </ComboBoxItem>
+                        <ComboBoxItem>
+                            اجل
+                        </ComboBoxItem>
+                    </ComboBox>
+                    <TextBlock Grid.Row="6" Grid.Column="7"
+                              
+                        Text="رقم السند" VerticalAlignment="Center" 
+                               Margin="12,4,0,10" HorizontalAlignment="Left" 
+                               Width="55" Height="16"/>
+                    <TextBox Grid.Row="6" Grid.Column="7"
+                             VerticalContentAlignment="Center"
+                             IsEnabled="False"
+                        Text="{Binding BillDayNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" 
+                             Margin="65,0,12,0" Height="23"/>
+                </Grid>
+               
+                <!--listView Bill2-->
+                <UC:MyListView 
+                    x:Name="myListView" Grid.Row="1" ItemsSource="{Binding BillCollection}"
+                  BorderBrush="LightGray" BorderThickness="1"
+                    EnableButton="{Binding EnableEditing, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                  Style="{StaticResource ListViewStyleWihtAddButton}"
+                  ItemContainerStyle="{StaticResource ListViewItemContainerStyle}"
+                   SelectedIndex="{Binding BillRowIndex,Mode=OneWayToSource}">
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel/>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="AddButton_Clicked">
+                            <i:InvokeCommandAction 
+                        Command="{Binding AddRowCommand}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <ListView.View>
+                        <GridView ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderContainerStyle}">
+                            <GridViewColumn Header="ItemID" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock x:Name="searchBox" Text="{Binding SelectedItemID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="باركود" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <UC:SearchTextBox x:Name="searchBox"
+                                                          Text="{Binding BarCode, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                          Command="{Binding DataContext.ItemBarCodeSearchCommand,
+                                            RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                                            
+                                         Style="{StaticResource SearchTextBoxStyle}"
+                                     BorderBrush="Transparent">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <i:InvokeCommandAction 
+                                                        Command="{Binding DataContext.ItemBarCodeTextChangedCommand,
+                                                        RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </UC:SearchTextBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="itemColumn" Header="اسم المادة" Width="200">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <UC:MyComboBox x:Name="ItemNameCmBx" 
+                                               BorderBrush="Transparent" 
+                                               Style="{StaticResource  MyComboBoxStyleSearchable}"
+                                               IsEditable="True" 
+                                               IsTextSearchEnabled="False"
+                                               BorderThickness="0"
+                                               IsLoading="{Binding IsLoadingItemCmBx}"
+                                               SelectedItemID="{Binding SelectedItemID, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                               SelectedItemBarCode="{Binding SelectedItemBarCode,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"  
+                                               IsDropDownOpen="{Binding IsItemNameDropOpened}"
+                                               Text="{Binding ItemName}"
+                                               ItemsSource="{Binding ItemsList}">
+                                            <!--this to recieve data as tuples-->
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="{Binding Item1}" Width="30"/>
+                                                        <TextBlock Text="{Binding Item2}" Width="0"/>
+                                                        <TextBlock Text="{Binding Item3}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="SelectionChanged">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ItemNameSelectionChangedChangedCommand,
+                                                        RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:EventTrigger>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.ItemNameTextChangedCommand,
+                                                        RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:EventTrigger>
+                                                <i:EventTrigger EventName="SearchButtonClick">
+                                                    <i:InvokeCommandAction Command="{Binding DataContext.SearchItemNameCommand,
+                                                        RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </UC:MyComboBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="الكمية" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Quantity, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource TextBoxStyle}"
+                                    BorderBrush="Transparent"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="السعر" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                         Style="{StaticResource TextBoxStyle}"
+                                     BorderBrush="Transparent"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="الاجمالي" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Total}" 
+                                                 IsEnabled="False"
+                                         Style="{StaticResource TextBoxStyle}"
+                                     BorderBrush="Transparent">
+                                            <i:Interaction.Triggers>
+                                                <i:EventTrigger EventName="TextChanged">
+                                                    <i:InvokeCommandAction 
+                                                        Command="{Binding DataContext.BillRowTotalCellTextChangedCommand,
+                                                         RelativeSource={RelativeSource AncestorType=ListBox}}"/>
+                                                </i:EventTrigger>
+                                            </i:Interaction.Triggers>
+                                        </TextBox>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="ملاحظات" Width="100">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox  Text="{Binding Note}" 
+                                          Style="{StaticResource TextBoxStyle}"
+                                    BorderBrush="Transparent"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn>
+                                <GridViewColumnHeader
+                                    UC:GridViewColumnBehaviour.FixableColumnWidth="True">
+                                    اجراءات
+                                </GridViewColumnHeader>
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" Background="White">
+                                            <Button x:Name="repeatButton" Style="{StaticResource buttonsStyle}"
+                                                ToolTip="تكرار"
+                                            BorderBrush="Transparent" Background="Transparent"
+                                              Command="{Binding DataContext.RepeatRowCommand,
+                                        RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                                <Button.Content>
+                                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text=""/>
+                                                </Button.Content>
+                                            </Button>
+                                            <Button x:Name="removeButton" Style="{StaticResource buttonsStyle}"
+                                            ToolTip="حذف"
+                                            BorderBrush="Transparent" Background="Transparent"    
+                                            Command="{Binding DataContext.RemoveRowCommand,
+                                        RelativeSource={RelativeSource AncestorType=ListBox}}">
+                                                <Button.Content>
+                                                    <TextBlock FontFamily="Segoe MDL2 Assets" Text=""/>
+                                                </Button.Content>
+                                            </Button>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </UC:MyListView>
+                <!--this contain textblock from billtype and bill total-->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="150"/>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="مجموع الفاتورة"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Grid.Column="0" Grid.Row="0" />
+                    <TextBox  Text="{Binding BillTotal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center" 
+                              VerticalAlignment="Center"
+                              IsEnabled="False"
+                              Grid.Column="1" Grid.Row="0">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding DiscountTotalTextChanedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Text="الخصم"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Grid.Column="0" Grid.Row="1" />
+                    <TextBox  Text="{Binding BillDiscount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center" 
+                              VerticalAlignment="Center"
+                              
+                              Grid.Column="1" Grid.Row="1">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding DiscountTotalTextChanedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </TextBox>
+                    <TextBlock Text="صافي الفاتورة"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Center"
+                               Grid.Column="2" Grid.Row="1" />
+                    <TextBox  Text="{Binding BillNet, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              VerticalContentAlignment="Center" 
+                              VerticalAlignment="Center"
+                              IsEnabled="False"
+                              Grid.Column="3" Grid.Row="1" />
+                    <TextBlock Text="IDType الفاتورة"
+                               Grid.Column="5" Grid.Row="0" />
+                    <TextBox x:Name="BillViewType" Text="{Binding BillTypeID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             IsEnabled="False"  
+                             Grid.Column="6" Grid.Row="0" HorizontalAlignment="Left" Width="220"/>
+                    <TextBox x:Name="BillViewType_Copy" Text="{Binding BillTypeNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="False"  
+                             Grid.Column="6" Grid.Row="1" HorizontalAlignment="Left" Width="220"/>
+                    <TextBox x:Name="BillViewType_Copy1" Text="{Binding BillTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        IsEnabled="False"  
+                             Grid.Column="6" Grid.Row="2" HorizontalAlignment="Left" Width="220"/>
+                    <TextBlock Text="NumberTyep الفاتورة"
+                        Grid.Column="5" Grid.Row="1" />
+                    <TextBlock Text="NameType الفاتورة"
+                        Grid.Column="5" Grid.Row="2" />
+                </Grid>
+                <Grid Grid.Row="1" Grid.RowSpan="2" Margin="0,18,0,0"
+                      
+                      Panel.ZIndex="10"
+                      Focusable="False"
+                      Background="Transparent"
+                        
+                    Visibility="{Binding EnableEditing, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ToBooleanConverter1}}">
+
+                </Grid>
+                <Grid Grid.Row="0" Grid.RowSpan="1" Margin="0,45,0,5"
+                      Panel.ZIndex="10"
+                      Focusable="False"
+                      Background="Transparent"
+
+                    Visibility="{Binding EnableEditing, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged,Converter={StaticResource ToBooleanConverter1}}">
+
+                </Grid>
+                <UC:Loading IsLoading="{Binding IsLoading}" Panel.ZIndex="10" Grid.RowSpan="3"/>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

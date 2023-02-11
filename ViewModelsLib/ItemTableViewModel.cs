@@ -8,6 +8,10 @@ using DataEntitiesLib;
 using FrameWorkLib;
 using System.Windows.Input;
 using System.Windows;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Controls;
+using System.Data;
 
 namespace ViewModelsLib
 {
@@ -28,17 +32,14 @@ namespace ViewModelsLib
                 }
             }
         }
-        private string itemName;
         public string ItemName
         {
-            get => itemName;
             set
             {
-                 SetProperty(ref itemName, value);
+                SetProperty(ref itemName, value);  
                
             }
         }
-        private string itemID;
         public string ItemID
         {
             get => itemID;
@@ -48,7 +49,6 @@ namespace ViewModelsLib
 
             }
         }
-        private string itemCode;
         public string ItemCode
         {
             get => itemCode;
@@ -58,7 +58,6 @@ namespace ViewModelsLib
 
             }
         }
-        private string itemBrand;
         public string ItemBrand
         {
             get => itemBrand;
@@ -68,7 +67,6 @@ namespace ViewModelsLib
 
             }
         }
-        private string itemGroup;
         public string ItemGroup
         {
             get => itemGroup;
@@ -77,16 +75,12 @@ namespace ViewModelsLib
                 SetProperty(ref itemGroup, value);
             }
         }
-        private int selectedItemGroupID;
-        public int SelectedItemGroupID
         {
             get => selectedItemGroupID;
             set
             {
-                SetProperty(ref selectedItemGroupID, value);
             }
         }
-        private bool itemGroupIsDroped;
         public bool ItemGroupIsDropedOpen
         {
             get => itemGroupIsDroped;
@@ -95,7 +89,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemGroupIsDroped, value);
             }
         }
-        private string itemEnglish;
         public string ItemEnglish
         {
             get => itemEnglish;
@@ -104,8 +97,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemEnglish, value);
             }
         }
-        private string itemState;
-        public string ItemSate
         {
             get => itemState;
             set
@@ -113,7 +104,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemState, value);
             }
         }
-        private string itemDate;
         public string ItemDate
         {
             get => itemDate;
@@ -122,7 +112,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemDate, value);
             }
         }
-        private string itemDetails;
         public string ItemDetails
         {
             get => itemDetails;
@@ -131,7 +120,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemDetails, value);
             }
         }
-        private string itemUnit;
         public string ItemUnit
         {
             get => itemUnit;
@@ -140,7 +128,6 @@ namespace ViewModelsLib
                 SetProperty(ref itemUnit, value);
             }
         }
-        private string itemModDate;
         public string ItemModDate
         {
             get => itemModDate;
@@ -149,11 +136,11 @@ namespace ViewModelsLib
                 SetProperty(ref itemModDate, value);
             }
         }
-        private bool isSaving;
+   
+        private bool isSaving = false;
 
         private bool isEditing;
 
-        private bool isLoading;
         public bool IsSaving 
         { 
             get => isSaving;
@@ -163,7 +150,7 @@ namespace ViewModelsLib
                 ((DelegateCommand)SaveCommand).RaiseCanExecuteChanged();
             }
         }
-        public bool IsEditing
+        public bool IsEditing 
         {
             get => isEditing;
             set
@@ -180,6 +167,133 @@ namespace ViewModelsLib
                 SetProperty(ref isLoading, value);
             }
         }
+        private bool isLoading_Group;
+
+        public bool IsLoading_Group
+        {
+            get => isLoading_Group;
+            set
+            {
+                SetProperty(ref isLoading_Group, value);
+            }
+        }
+        private bool isVisibleID = false;
+        private bool isVisibleCode = false;
+        private bool isVisibleName = true;
+        private bool isVisibleGroupID = true;
+        private bool isVisibleGroupName = true;
+        private bool isVisibleNote = true;
+        private bool isVisibleBalance = true;
+        private bool isVisibleBarCode = true;
+        private bool isVisibleUnit = true;
+        private bool isVisibleModDay = true;
+        private bool isVisibleBrand = true;
+        private bool isVisibleState = true;
+        private bool isVisibleEnglishName = true;
+        public bool IsVisibleID
+        {
+            get => isVisibleID;
+            set
+            {
+                SetProperty(ref isVisibleID, value);
+            }
+        }
+        public bool IsVisibleCode
+        {
+            get => isVisibleCode;
+            set
+            {
+                SetProperty(ref isVisibleCode, value);
+            }
+        }
+        public bool IsVisibleName
+        {
+            get => isVisibleName;
+            set
+            {
+                SetProperty(ref isVisibleName, value);
+            }
+        }
+        public bool IsVisibleGroupID
+        {
+            get => isVisibleGroupID;
+            set
+            {
+                SetProperty(ref isVisibleGroupID, value);
+            }
+        }
+        public bool IsVisibleGroupName
+        {
+            get => isVisibleGroupName;
+            set
+            {
+                SetProperty(ref isVisibleGroupName, value);
+            }
+        }
+        public bool IsVisibleNote
+        {
+            get => isVisibleNote;
+            set
+            {
+                SetProperty(ref isVisibleNote, value);
+            }
+        }
+        public bool IsVisibleBalance
+        {
+            get => isVisibleBalance;
+            set
+            {
+                SetProperty(ref isVisibleBalance, value);
+            }
+        }
+        public bool IsVisibleBarCode
+        {
+            get => isVisibleBarCode;
+            set
+            {
+                SetProperty(ref isVisibleBarCode, value);
+            }
+        }
+        public bool IsVisibleUnit
+        {
+            get => isVisibleUnit;
+            set
+            {
+                SetProperty(ref isVisibleUnit, value);
+            }
+        }
+        public bool IsVisibleModDay
+        {
+            get => isVisibleModDay;
+            set
+            {
+                SetProperty(ref isVisibleModDay, value);
+            }
+        }
+        public bool IsVisibleBrand
+        {
+            get => isVisibleBrand;
+            set
+            {
+                SetProperty(ref isVisibleBrand, value);
+            }
+        }
+        public bool IsVisibleState
+        {
+            get => isVisibleState;
+            set
+            {
+                SetProperty(ref isVisibleState, value);
+            }
+        }
+        public bool IsVisibleEnglishName
+        {
+            get => isVisibleEnglishName;
+            set
+            {
+                SetProperty(ref isVisibleEnglishName, value);
+            }
+        }
         #endregion
         #region DelegateCommands
         public ICommand InsertCommand { get; set; }
@@ -188,30 +302,115 @@ namespace ViewModelsLib
         public ICommand ViewLoadedCommand { get; set; }
         public ICommand GroupSelectionChangedCommand { get; set; }
         public ICommand GroupTextChangedCommand { get; set; }
+        public ICommand SearchByItemNameCommand { get; set; }
+        public ICommand ListViewSelectionChangedCommand { get; set; }
+
+        public ICommand ExpandTreeViewCommand { get; set; }
+        public ICommand CollapseTreeViewCommand { get; set; }
+        public ICommand TreeViewSelectionChangedCommand { get; set; }
 
         #endregion
         public ItemTableViewModel()
         {
-            itemTableModel = new ItemTableModel();
-            InsertCommand = new DelegateCommand(Insert);
-            ModCommand = new DelegateCommand(Modify, () => IsEditing);
-            SaveCommand = new DelegateCommand(Save, () => IsSaving);
-            ViewLoadedCommand = new DelegateCommand(ViewLoaded);
-            GroupSelectionChangedCommand = new DelegateCommand(GroupSelectionChanged);
-            GroupTextChangedCommand = new DelegateCommand(GroupTextChanged);
-
+            try
+            {
+                itemTableModel = new ItemTableModel();
+                InsertCommand = new DelegateCommand(Insert);
+                ModCommand = new DelegateCommand(Modify, () => IsEditing);
+                SaveCommand = new DelegateCommand(Save, () => IsSaving);
+                ViewLoadedCommand = new DelegateCommand(ViewLoaded);
+                GroupSelectionChangedCommand = new DelegateCommand(GroupSelectionChanged);
+                GroupTextChangedCommand = new DelegateCommand(GroupTextChanged);
+                SearchByItemNameCommand = new DelegateCommand(SearchByItemName);
+                ListViewSelectionChangedCommand = new DelegateCommand(ListViewSelectionChanged);
+                ExpandTreeViewCommand = new DelegateCommand(ExpandTreeView);
+                TreeViewSelectionChangedCommand = new DelegateCommand(TreeViewSelectionChanged);
+            }
+            catch(Exception ex) { MessageBox.Show(ex.Message); }
         }
 
-        private void GroupTextChanged()
+        private async void ExpandTreeView(object parameter)
+        {
+            //try
+            //{
+        
+            //    TreeViewItem item = (TreeViewItem)((parameter as RoutedEventArgs).OriginalSource);
+            //    item.Items.Clear();
+            //    List<Tuple<int, string>> tuples = null;
+
+            //    if (IsLoading)
+            //        return;
+            //    IsLoading = true;
+            //    await Task.Run(() =>
+            //    {
+            //        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+            //        {
+
+            //            if (int.Parse(item.Tag.ToString()) == 0) // for all categories
+            //                tuples = this.itemTableModel.GetGroups();
+            //            else
+            //                tuples = this.itemTableModel.GetItemsForTreeView(int.Parse(item.Tag.ToString()));
+            //            foreach (Tuple<int, string> ele in tuples)
+            //            {
+            //                TreeViewItem newItem = new TreeViewItem();
+            //                newItem.Tag = ele.Item1;
+            //                TextBlock textBlock = new TextBlock();
+            //                textBlock.Text = $"{ele.Item2}";
+            //                newItem.Header = textBlock;
+            //                newItem.Items.Add("");
+            //                item.Items.Add(newItem);
+            //            }
+
+            //        });
+            //    });
+
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
+            //finally
+            //{
+            //    IsLoading = false;
+            //}
+        }
+
         {
             try
             {
-                string st = this.ItemGroup;
-                this.ItemGroupIsDropedOpen = true;
             }
             catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
+        private void ListViewSelectionChanged()
+        {
+            try
+            {
+                if (this.ListViewSelectedItem is null)
+                    return;
+
+                this.IsEditing = true;
+
+                DataRowView selectedItem = this.ListViewSelectedItem as DataRowView;
+
+                this.ItemName       = selectedItem["Name"] as string;
+                this.ItemCode       = (selectedItem["Code"]).ToString();
+                this.ItemBrand      = selectedItem["Brand"] as string;
+                this.ItemGroup      = selectedItem["GroupName"] as string;
+                this.ItemBrand      = selectedItem["EnglishName"] as string;
+                this.ItemState      = selectedItem["State"] as string;
+                this.ItemModDate    =  (selectedItem["ModDate"]).ToString();
+                this.ItemUnit       = selectedItem["Unit"] as string;
+                this.ItemBalance    = (selectedItem["Balance"]).ToString();
+                this.ItemDetails       = selectedItem["Note"] as string;
+                this.ItemBarCode = selectedItem["BarCode"] as string;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             finally
             {
@@ -219,22 +418,35 @@ namespace ViewModelsLib
             }
         }
 
-        private void GroupSelectionChanged()
         {
             try
             {
-                if(String.IsNullOrEmpty(this.ItemGroup))
-                {
-                   // this.SelectedItemGroupID = itemTableModel.GetGroup(this.ItemGroup).Item1;
-                }
+        {
+        }
+        private async void GroupSelectionChanged()
+        {
+            try
+            {
+                // if there is any loading return
+                if (IsLoading || IsLoading_Group)
+                    return;
+                this.IsLoading = true;
+
+                string SelectedGroupName = this.SelectedItemGroupName;
+
+                if (String.IsNullOrEmpty(SelectedGroupName))
+                    return;
+
+                await Task.Run(() =>
+                { 
+                    this.SelectedItemGroupID = itemTableModel.GetGroup(SelectedGroupName).Item1.ToString();
+                });
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
-
             }
         }
 
@@ -243,14 +455,21 @@ namespace ViewModelsLib
         {
             try
             {
+                if (IsLoading) // wait until the task finish loading
+                    return;
                 IsLoading = true;
 
+                IsEditing = false;
+
+                selectedItemGroupName = null;
+               
                 await Task.Run(() =>
                 {
-                    //System.Windows.Application.Current
-                    itemTableModel.GetItems();
-                });
 
+                        }
+                        this.ItemTable.AcceptChanges();
+                    });
+                });
             }catch(Exception ex)
             {
 
@@ -261,20 +480,32 @@ namespace ViewModelsLib
                 IsLoading = false;
             }
         }
-
-        private void Save()
         {
             try
             {
+                this.IsLoading = true;
 
+                if (this.ItemTable.Count == 0)
+                    return;
+
+                await Task.Run(() =>
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        itemTableModel.UpdateItemTable(this.ItemTable);
+                    });
+                });
+
+                this.IsLoading = false;
+                this.IsSaving = false;
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
-
+                this.IsLoading = false;
+               
             }
         }
 
@@ -282,11 +513,46 @@ namespace ViewModelsLib
         {
             try
             {
+                this.IsSaving = true;
+
+                if (this.ListViewSelectedItem is null)
+                    return;
+
+                DataRowView selectedItem = this.ListViewSelectedItem as DataRowView;
+
+                ItemRow modifiedRow = this.ItemTable.Rows.Find((int)selectedItem["ID"]) as ItemRow;
+
+                if (String.IsNullOrEmpty(this.ItemName))
+                { MessageBox.Show("يجب ادخال اسم الصنف", "", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                if (String.IsNullOrEmpty(this.ItemCode))
+                { MessageBox.Show("يجب ادخال رقم الصنف", "", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+                if (String.IsNullOrEmpty(this.ItemGroup))
+                { MessageBox.Show("يجب ادخال مجموعة الصنف", "", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+
+
+
+                modifiedRow.Name = this.ItemName;
+                modifiedRow.Code = int.Parse(this.ItemCode);
+                modifiedRow.Note = this.ItemDetails;
+                modifiedRow.GroupID = itemTableModel.GetGroup(this.ItemGroup).Item1;
+
+                modifiedRow.GroupName = this.ItemGroup;
+
+                if (!String.IsNullOrEmpty(this.ItemBalance))
+                    modifiedRow.Balance = double.Parse(this.ItemBalance);
+
+
+
+                modifiedRow.BarCode = this.ItemBarCode;
+                modifiedRow.Unit = this.ItemUnit;
+                modifiedRow.ModeDate = this.ItemModDate;
+                modifiedRow.Brand = this.ItemBrand;
+                modifiedRow.State = this.ItemState;
+                modifiedRow.EnglishName = this.ItemEnglish;
 
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
@@ -298,22 +564,41 @@ namespace ViewModelsLib
         {
             try
             {
+
                 ItemRow itemRow = this.ItemTable.NewItemRow();
 
-                itemRow.Name = this.itemName;
                 itemRow.Code = int.Parse(this.ItemCode);
                 itemRow.Note = this.ItemDetails;
                 itemRow.GroupID = itemTableModel.GetGroup(this.ItemGroup).Item1;
 
+                itemRow.GroupName = this.ItemGroup;
+
+                if (!String.IsNullOrEmpty(this.ItemBalance))
+                    itemRow.Balance = double.Parse(this.ItemBalance);
+
+
+                itemRow.BarCode = this.ItemBarCode;
+                itemRow.Unit = this.ItemUnit;
+                itemRow.ModeDate = this.ItemModDate;
+                itemRow.Brand = this.ItemBrand;
+                itemRow.State = this.ItemState;
+                itemRow.EnglishName = this.ItemEnglish;
+
+                this.ItemTable.AddItemRow(itemRow);
+                this.IsSaving = true;
+
             }
             catch (Exception ex)
             {
-
             }
             finally
             {
 
             }
         }
+    }
+    public class GridViewColumnsVisibility : BindableBase
+    {
+       
     }
 }

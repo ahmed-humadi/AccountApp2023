@@ -13,6 +13,7 @@ namespace BusinessLib
     public class ItemBL
     {
         private readonly object lockToken = new object();
+
         private DataAccess _dataAccess;
         public DataAccess DataAccess
         {
@@ -93,11 +94,249 @@ namespace BusinessLib
                 itemRow["Unit"]     = (int)dataReader[7];
                 itemRow["ModDate"]  = (DateTime)dataReader[8];
                 table.AddItemRow(itemRow);
+            }
+            table.AcceptChanges();
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return table;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="selector">1:(name); 2:(date)</param>
+        /// <returns></returns>
+        public ItemTable GetItems(string searchToken,int selector)
+        {
+            ItemTable table = new ItemTable();
+            string queryString = string.Empty;
+            if (selector == 1)
+                queryString = $"" +
+                "SELECT        dbo.Item.ID, dbo.Item.Code, dbo.Item.Name, dbo.Item.Note, dbo.Item.Balance, " +
+                               "dbo.Item.Unit,  dbo.Item.ModDate, dbo.Item.State, dbo.Item.EnglishName, dbo.Item.Brand, dbo.Item.BarCode, " +
+                               "dbo.Category.Name AS CategoryName, dbo.Item.GroupID, dbo.Store.Name AS StoreName, dbo.Item.StoreID " +
+                "FROM          dbo.Item INNER JOIN dbo.Category ON dbo.Item.GroupID = dbo.Category.ID INNER JOIN dbo.Store ON dbo.Item.StoreID = dbo.Store.ID " +
+                              
+               $"WHERE         (dbo.Item.Name = '{searchToken}')";
+            else if (selector == 2)
+                queryString = $"" +
+                "SELECT         dbo.Item.ID, dbo.Item.Code, dbo.Item.Name, dbo.Item.Note, dbo.Item.Balance, dbo.Item.Unit, dbo.Item.ModDate, dbo.Item.State, dbo.Item.EnglishName, dbo.Item.Brand, dbo.Item.BarCode, dbo.Category.Name AS CategoryName,dbo.Item.GroupID AS CategoryID " +
+                "FROM            dbo.Item INNER JOIN dbo.Category ON dbo.Item.GroupID = dbo.Category.ID " +
+                $"WHERE         (dbo.Item.ModDate = '{searchToken}')";
+            else
+                throw new ArgumentOutOfRangeException(nameof(selector), "عملية البحث غير متوفرة");
 
+            if (String.IsNullOrEmpty(queryString))
+                throw new ArgumentNullException();
+
+
+            DataAccess.ExecuteQueryCommand(queryString, CommandType.Text);
+
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                ItemRow itemRow = table.NewItemRow();
+                itemRow["ID"] = (int)dataReader[0];
+                itemRow["Code"] = (int)dataReader[1];
+
+                itemRow["Name"] = (string)dataReader[2];
+
+                if (!dataReader.IsDBNull(3))
+                    itemRow["Note"] = (string)dataReader[3];
+                if (!dataReader.IsDBNull(4))
+                    itemRow["Balance"] = (double)dataReader[4];
+                if (!dataReader.IsDBNull(5))
+                    itemRow["Unit"] = (string)dataReader[5];
+                if (!dataReader.IsDBNull(6))
+                    itemRow["ModDate"] = (string)dataReader[6];
+                if (!dataReader.IsDBNull(7))
+                    itemRow["State"] = (string)dataReader[7];
+                if (!dataReader.IsDBNull(8))
+                    itemRow["EnglishName"] = (string)dataReader[8];
+                if (!dataReader.IsDBNull(9))
+                    itemRow["Brand"] = (string)dataReader[9];
+                if (!dataReader.IsDBNull(10))
+                    itemRow["BarCode"] = (string)dataReader[10];
+
+                itemRow["GroupName"] = (string)dataReader[11];
+
+                itemRow["GroupID"] = (int)dataReader[12];
+
+                itemRow["StoreName"] = (string)dataReader[13];
+
+                itemRow["StoreID"] = (int)dataReader[14];
+
+                table.AddItemRow(itemRow);
+            }
+            table.AcceptChanges();
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return table;
+        }
+        public ItemTable GetItems(string name)
+        {
+            ItemTable table = new ItemTable();
+            DataAccess.ExecuteQueryCommand($"" +
+                "SELECT         dbo.Item.ID, dbo.Item.Code, dbo.Item.Name, dbo.Item.Note, dbo.Item.Balance, dbo.Item.Unit, dbo.Item.ModDate, dbo.Item.State, dbo.Item.EnglishName, dbo.Item.Brand, dbo.Item.BarCode, dbo.Category.Name AS CategoryName,dbo.Item.GroupID AS CategoryID " +
+                "FROM            dbo.Item INNER JOIN dbo.Category ON dbo.Item.GroupID = dbo.Category.ID "+
+                $"WHERE         (dbo.Item.Name = '{name}') "
+                ,CommandType.Text);
+
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                ItemRow itemRow = table.NewItemRow();
+                itemRow["ID"] = (int)dataReader[0];
+                itemRow["Code"] = (int)dataReader[1];
+
+                itemRow["Name"] = (string)dataReader[2];
+
+                if (!dataReader.IsDBNull(3))
+                    itemRow["Note"] = (string)dataReader[3];
+                if (!dataReader.IsDBNull(4))
+                    itemRow["Balance"] = (double)dataReader[4];
+                if (!dataReader.IsDBNull(5))
+                    itemRow["Unit"] = (string)dataReader[5];
+                if (!dataReader.IsDBNull(6))
+                    itemRow["ModDate"] = (string)dataReader[6];
+                if (!dataReader.IsDBNull(7))
+                    itemRow["State"] = (string)dataReader[7];
+                if (!dataReader.IsDBNull(8))
+                    itemRow["EnglishName"] = (string)dataReader[8];
+                if (!dataReader.IsDBNull(9))
+                    itemRow["Brand"] = (string)dataReader[9];
+                if (!dataReader.IsDBNull(10))
+                    itemRow["BarCode"] = (string)dataReader[10];
+
+                itemRow["GroupName"] = (string)dataReader[11];
+
+                itemRow["GroupID"] = (int)dataReader[12];
+                table.AddItemRow(itemRow);
+            }
+            table.AcceptChanges();
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return table;
+        }
+        public ItemTable GetItems(int code)
+        {
+            ItemTable table = new ItemTable();
+            DataAccess.ExecuteQueryCommand($"" +
+                $"SELECT         dbo.Item.ID, dbo.Item.Code, dbo.Item.Name, dbo.Item.Note, dbo.Item.Balance, dbo.Item.Unit, dbo.Item.ModDate, dbo.Item.State, dbo.Item.EnglishName, dbo.Item.Brand, dbo.Item.BarCode, dbo.Category.Name AS CategoryName,dbo.Item.GroupID AS CategoryID " +
+                "FROM            dbo.Item INNER JOIN dbo.Category ON dbo.Item.GroupID = dbo.Category.ID "+
+                $"WHERE         (dbo.Item.Code = '{code}')"
+                , CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                ItemRow itemRow = table.NewItemRow();
+                itemRow["ID"] = (int)dataReader[0];
+                itemRow["Code"] = (int)dataReader[1];
+
+                itemRow["Name"] = (string)dataReader[2];
+
+                if (!dataReader.IsDBNull(3))
+                    itemRow["Note"] = (string)dataReader[3];
+                if (!dataReader.IsDBNull(4))
+                    itemRow["Balance"] = (double)dataReader[4];
+                if (!dataReader.IsDBNull(5))
+                    itemRow["Unit"] = (string)dataReader[5];
+                if (!dataReader.IsDBNull(6))
+                    itemRow["ModDate"] = (string)dataReader[6];
+                if (!dataReader.IsDBNull(7))
+                    itemRow["State"] = (string)dataReader[7];
+                if (!dataReader.IsDBNull(8))
+                    itemRow["EnglishName"] = (string)dataReader[8];
+                if (!dataReader.IsDBNull(9))
+                    itemRow["Brand"] = (string)dataReader[9];
+                if (!dataReader.IsDBNull(10))
+                    itemRow["BarCode"] = (string)dataReader[10];
+
+                itemRow["GroupName"] = (string)dataReader[11];
+
+                itemRow["GroupID"] = (int)dataReader[12];
+                table.AddItemRow(itemRow);
+            }
+            table.AcceptChanges();
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return table;
+        }
+        public List<Tuple<int, string>> GetItemsForTreeView(int categoriesID)
+        {
+
+            DataAccess.ExecuteQueryCommand($"Select ID, Name From Item Where GroupID ='{categoriesID}'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<Tuple<int, string>> tuples = new List<Tuple<int, string>>();
+
+            while (dataReader.Read())
+            {
+                Tuple<int, string> tuple = new Tuple<int, string>(
+                     (int)dataReader[0],
+                     (string)dataReader[1]
+                    );
+                tuples.Add(tuple);
             }
             DataAccess.CloseDataReader();
             DataAccess.CloseSqlConnection();
+            return tuples;
+        }
+        public ItemTable GetItem(int id)
+        {
+            ItemTable table = new ItemTable();
+            string queryString = string.Empty;
+            queryString = $"" +
+            "SELECT        dbo.Item.* " +
+            "FROM          dbo.Item " +
+           $"WHERE         (dbo.Item.ID = '{id}')";
+
+            DataAccess.ExecuteQueryCommand(queryString, CommandType.Text);
+
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                ItemRow itemRow = table.NewItemRow();
+                itemRow["ID"] = (int)dataReader[0];
+                itemRow["Code"] = (int)dataReader[1];
+
+                itemRow["Name"] = (string)dataReader[2];
+
+                itemRow["GroupID"] = (int)dataReader[3];
+
+                if (!dataReader.IsDBNull(4))
+                    itemRow["Note"] = (string)dataReader[4];
+                if (!dataReader.IsDBNull(5))
+                    itemRow["Balance"] = (double)dataReader[5];
+                if (!dataReader.IsDBNull(6))
+                    itemRow["BarCode"] = (string)dataReader[6];
+                if (!dataReader.IsDBNull(7))
+                    itemRow["Unit"] = (string)dataReader[7];
+                if (!dataReader.IsDBNull(6))
+                    itemRow["ModDate"] = (string)dataReader[8];
+                if (!dataReader.IsDBNull(9))
+                    itemRow["Brand"] = (string)dataReader[9];
+                if (!dataReader.IsDBNull(10))
+                    itemRow["State"] = (string)dataReader[10];
+                if (!dataReader.IsDBNull(11))
+                    itemRow["EnglishName"] = (string)dataReader[11];
+
+                itemRow["StoreID"] = (int)dataReader[12];
+
+                table.AddItemRow(itemRow);
+            }
             table.AcceptChanges();
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
             return table;
         }
         public void UpdateItemTable(ItemTable itemTable)
@@ -135,6 +374,40 @@ namespace BusinessLib
                 //}
             }
             DataAccess.CloseSqlConnection();
+        }
+        public void AddItemBalance(int id, double balance)
+        {
+            DataAccess.OpenSqlConnection();
+            SqlParameter[] sqlParameters = new SqlParameter[2]; // not GroupName
+            sqlParameters[0] = new SqlParameter($"@id", id);
+            sqlParameters[1] = new SqlParameter($"@balance", balance);
+            DataAccess.ExecuteNonQueryCommand("spAddItemBalance", CommandType.StoredProcedure, sqlParameters);
+            DataAccess.ExecuteNonQuery();
+        }
+        public void SubstractItemBalance(int id, double balance)
+        {
+            DataAccess.OpenSqlConnection();
+            SqlParameter[] sqlParameters = new SqlParameter[2]; // not GroupName
+            sqlParameters[0] = new SqlParameter($"@id", id);
+            sqlParameters[1] = new SqlParameter($"@balance", balance);
+            DataAccess.ExecuteNonQueryCommand("spSubstractItemBalance", CommandType.StoredProcedure, sqlParameters);
+            DataAccess.ExecuteNonQuery();
+        }
+
+        /// <summary>
+        /// Inventory == Store
+        /// </summary>
+        /// <param name=""></param>
+        /// <param name=""></param>
+        /// <returns></returns>
+        public void AssignItmeInvetory(int id, int inventory)
+        {
+            DataAccess.OpenSqlConnection();
+            SqlParameter[] sqlParameters = new SqlParameter[2]; // not GroupName
+            sqlParameters[0] = new SqlParameter($"@id", id);
+            sqlParameters[1] = new SqlParameter($"@StoreID", inventory);
+            DataAccess.ExecuteNonQueryCommand("spAssignItemStore", CommandType.StoredProcedure, sqlParameters);
+            DataAccess.ExecuteNonQuery();
         }
     }
 }

@@ -49,6 +49,25 @@ namespace BusinessLib
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
+        public Tuple<string, int> GetAccount(string name)
+        {
+            DataAccess.ExecuteQueryCommand($"Select ID From EndAccount WHERE Name = '{name}'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            Tuple<string, int> tuple = null;
+            while (dataReader.Read())
+            {
+
+                tuple = new Tuple<string, int>(name
+                    , (int)dataReader[0]);
+
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return tuple;
+        }
+        [Obsolete]
         public void FillEndAccountsTable<T>(EndAccountsTable endAccountsTable)
             where T : DataTable
         {

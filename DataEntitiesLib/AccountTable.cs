@@ -19,11 +19,17 @@ namespace DataEntitiesLib
 
         private DataColumn columnEndAccountID;
 
+        private DataColumn columnDate;
+
+        private DataColumn columnParentName;
+
+        private DataColumn columnEndAccountName;
+
         private string[] columnsName;
         public AccountTable() // costum columns
         {
             this.TableName = "AccountTable";
-            this.columnsName = new string[] { "ID", "Name", "ParentID", "Code", "EndAccountID"};
+            this.columnsName = new string[] { "ID", "Name", "ParentID", "Code", "EndAccountID", "Date", "ParentName", "EndAccountName" };
             this.BeginInit();
             this.InitClass();
             this.EndInit();
@@ -42,6 +48,9 @@ namespace DataEntitiesLib
         public DataColumn ColumnName { get => columnName; }
         public DataColumn ColumnParentID { get => columnParentID; }
         public DataColumn ColumnCode { get => columnCode; }
+        public DataColumn ColumnDate { get => columnDate; }
+        public DataColumn ColumnParentName { get => columnParentName; set => columnParentName = value; }
+        public DataColumn ColumnEndAccountName { get => columnEndAccountName; set => columnEndAccountName = value; }
         public int Count { get { return this.Rows.Count; } }
         public DataRowCollection AccountRows { get { return this.Rows; } }
         public AccountRow this[int index]
@@ -67,6 +76,10 @@ namespace DataEntitiesLib
                     this.PrimaryKey = new DataColumn[] { dataColumn };
                     // set data type
                     dataColumn.DataType = typeof(int);
+                    //
+                    dataColumn.AutoIncrement = true;
+                    //
+                    dataColumn.AutoIncrementStep = 1;
                     // set data Max length
                     dataColumn.MaxLength = -1;
                     // set allow null
@@ -124,7 +137,40 @@ namespace DataEntitiesLib
                     // add column
                     this.columnEndAccountID = dataColumn;
                 }
-             
+                if (dataColumn.ColumnName == "Date")
+                {
+                    dataColumn.DataType = typeof(DateTime);
+                    // set allow null
+                    dataColumn.AllowDBNull = false;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.columnDate = dataColumn;
+                }
+                if (dataColumn.ColumnName == "ParentName")
+                {
+                    dataColumn.DataType = typeof(string);
+                    // set data Max length
+                    dataColumn.MaxLength = 500;
+                    // set allow null
+                    dataColumn.AllowDBNull = true;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.ColumnParentName = dataColumn;
+                }
+                if (dataColumn.ColumnName == "EndAccountName")
+                {
+                    dataColumn.DataType = typeof(string);
+                    // set data Max length
+                    dataColumn.MaxLength = 500;
+                    // set allow null
+                    dataColumn.AllowDBNull = true;
+                    // set unique
+                    dataColumn.Unique = false;
+                    // add column
+                    this.ColumnEndAccountName = dataColumn;
+                }
             }
         }
         private void InitClassGeneric()
@@ -207,9 +253,38 @@ namespace DataEntitiesLib
                 this[this.tableAccounts.ColumnEndAccountID] = value;
             }
         }
-    }
-    public class AccountColumn : DataColumn
-    {
-     
+        public DateTime Date
+        {
+            get
+            {
+                return ((DateTime)(this[this.tableAccounts.ColumnDate]));
+            }
+            set
+            {
+                this[this.tableAccounts.ColumnDate] = value;
+            }
+        }
+        public string ParentName
+        {
+            get
+            {
+                return ((string)(this[this.tableAccounts.ColumnParentName]));
+            }
+            set
+            {
+                this[this.tableAccounts.ColumnParentName] = value;
+            }
+        }
+        public string EndAccountName
+        {
+            get
+            {
+                return ((string)(this[this.tableAccounts.ColumnEndAccountName]));
+            }
+            set
+            {
+                this[this.tableAccounts.ColumnEndAccountName] = value;
+            }
+        }
     }
 }

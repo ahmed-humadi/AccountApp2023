@@ -49,6 +49,7 @@ namespace DataAccessLib
                     _command = _connection.CreateCommand();
                     _command.CommandType = commandType;
                     _command.CommandText = commandString;
+                    _command.Transaction = _transaction;
                     _command.Prepare();
 
                 }
@@ -63,6 +64,7 @@ namespace DataAccessLib
                     _command = _connection.CreateCommand();
                     _command.CommandType = commandType;
                     _command.CommandText = commandString;
+                    _command.Transaction = _transaction;
                     _command.Parameters.AddRange(sqlParameters);
                     _command.Prepare();
                 }

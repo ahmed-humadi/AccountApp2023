@@ -119,13 +119,20 @@
                                 </TextBlock>
                             </Button.Content>
                         </Button>
-                        <TextBox x:Name="DayIDTxtBx" Grid.Column="2" BorderBrush="LightGray"
+                        <Grid Grid.Column="2" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding dayTableViewModel.DayID, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" >
+                                
+                            </TextBlock>
+                            <TextBox x:Name="DayIDTxtBx" Grid.Column="1" BorderBrush="LightGray"
                                  BorderThickness="1" IsEnabled="True"
-                                 Text="{Binding dayTableViewModel.DayID}"
+                                 Text="{Binding dayTableViewModel.DayNumber, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                             TextAlignment="Center"
                                 >
-
-                            <i:Interaction.Triggers>
+                               <i:Interaction.Triggers>
                                 <i:EventTrigger EventName="TextChanged">
                                     <i:InvokeCommandAction
                                         Command="{Binding dayTableViewModel.DayIDTextChangedCommand}"
@@ -134,7 +141,10 @@
                                     </i:InvokeCommandAction>
                                 </i:EventTrigger>
                             </i:Interaction.Triggers>
-                        </TextBox>
+                        </TextBox>  
+                        </Grid>
+                       
+                           
                         <Button Background="White" Grid.Column="4"
                                 BorderBrush="LightGray"
                                 Command="{Binding dayTableViewModel.MinDayCommand}">

@@ -13,7 +13,7 @@ using System.Windows;
 
 namespace ViewModelsLib
 {
-    public class CategoryViewModel : ViewModelBase
+    public class CategoryViewModel : BindableBase
     {
         private readonly object lockToken = new object();
         private CategoryTableModel categoryModel;

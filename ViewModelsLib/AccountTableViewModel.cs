@@ -10,20 +10,21 @@ using System.Windows;
 using ModelsLib;
 using System.Data;
 using System.Windows.Controls;
-
+using FrameWorkLib;
 namespace ViewModelsLib
 {
     /// <summary>
     /// Accounts (دليل الحسابات) Guid ViewMode
     /// </summary>
-    public class AccountTableViewModel:IDisposable ,INotifyPropertyChanged
+    public class AccountTableViewModel: BindableBase,  IDisposable 
     {
         private bool isTableLoadedFromTreeView = false;
 
         private bool isTableLoadedFromSearch = false;
 
-        private ModelsLib.AccountTableModel accountsTableModel;
-
+        // accounts Model
+        private AccountTableModel accountsTableModel;
+        //
         private AccountTable accountTable;
         public AccountTable AccountTable 
         { 
@@ -36,55 +37,116 @@ namespace ViewModelsLib
             }
             set
             {
-                accountTable = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccountTable)));
+                SetProperty(ref accountTable, value);
             }
         }
 
         private DataRowView listViewSelectedItem;
 
+        private string accountParent;
+        public string AccountParent
+        {
+            get => accountParent;
+            set
+            {
+                SetProperty(ref accountParent, value);
+            }
+        }
+
+        private string selectedEndAccount;
+        public string SelectedEndAccount
+        {
+            get => selectedEndAccount;
+            set
+            {
+                SetProperty(ref selectedEndAccount, value);
+            }
+        }
+
+        private int selectedEndAccountID;
+        public int SelectedEndAccountID
+        {
+            get => selectedEndAccountID;
+            set
+            {
+                SetProperty(ref selectedEndAccountID, value);
+            }
+        }
+
+        private List<string> endAccountCmBxList;
+        public List<string> EndAccountCmBxList
+        {
+            get => endAccountCmBxList;
+            set
+            {
+                SetProperty(ref endAccountCmBxList, value);
+            }
+        }
+
         private string accountName;
-
-        private object accountParent;
-
-        private int accountCode;
-
-        private object accountEndAccount;
         public string AccountName 
         { 
             get => accountName;
             set
             {
-                accountName = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccountName)));
+                SetProperty(ref accountName, value);
             }
         }
-        public object AccountParent
+
+        private string selectedAccountParent;
+        public string SelectedAccountParent
         {
-            get => accountParent;
+            get => selectedAccountParent;
             set
             {
-                accountParent = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccountParent)));
+                SetProperty(ref selectedAccountParent, value);
             }
         }
-        public int AccountCode 
+
+        private bool isDropOpenParentAccountCmBx;
+        public bool IsDropOpenParentAccountCmBx
+        {
+            get => isDropOpenParentAccountCmBx;
+            set
+            {
+                SetProperty(ref isDropOpenParentAccountCmBx, value);
+            }
+        }
+
+        private List<string> listParentAccountCmBx;
+        public List<string> ListParentAccountCmBx
+        {
+            get => listParentAccountCmBx;
+            set
+            {
+                SetProperty(ref listParentAccountCmBx, value);
+            }
+        }
+
+        private int selectedAccountParentID;
+        internal int SelectedAccountParentID
+        {
+            get => selectedAccountParentID;
+            set => selectedAccountParentID = value;
+        }
+
+        private string accountCode;
+        public string AccountCode 
         {
             get => accountCode;
             set
             {
-                accountCode = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccountCode)));
-
+                SetProperty(ref accountCode, value);
             }
         }
-        public object AccountEndAccount
+
+        private string accountDate;
+        public string AccountDate
         {
-            get => accountEndAccount;
+            get => accountDate;
             set
             {
-                accountEndAccount = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(AccountEndAccount)));
+                SetProperty(ref accountDate, value);
             }
         }
         public DataRowView ListViewSelectedItem 
@@ -92,14 +154,59 @@ namespace ViewModelsLib
             get => listViewSelectedItem;
             set
             {
-                listViewSelectedItem = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ListViewSelectedItem)));
+                SetProperty(ref listViewSelectedItem, value);
             }
         }
 
         private bool disposedValue = false;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        #region Main Accounts Tab binding properties
+        private AccountTable accountsTable_Main;
+        public AccountTable AccountsTable_Main
+        {
+            get => accountsTable_Main;
+            set
+            {
+                SetProperty(ref accountsTable_Main, value);
+            }
+        }
+        private string accountName_Main = string.Empty;
+        private string endaccount_Main = string.Empty;
+        private string accountCode_Main = string.Empty;
+        private string accountDate_Main = string.Empty;
+        public string AccountName_Main
+        {
+            get => accountName_Main;
+            set
+            {
+                SetProperty(ref accountName_Main, value);
+            }
+        }
+        public string Endaccount_Main
+        {
+            get => endaccount_Main;
+            set
+            {
+                SetProperty(ref endaccount_Main, value);
+            }
+        }
+        public string AccountCode_Main
+        {
+            get => accountCode_Main;
+            set
+            {
+                SetProperty(ref accountCode_Main, value);
+            }
+        }
+        public string AccountDate_Main
+        {
+            get => accountDate_Main;
+            set
+            {
+                SetProperty(ref accountDate_Main, value);
+            }
+        }
+        #endregion
         #region Commands
         public ICommand InsertAccountCommand { get; set; }
         public ICommand NewAccountCommand { get; set; }
@@ -114,7 +221,18 @@ namespace ViewModelsLib
         public ICommand AccountsTreeViewSelectionChangedCommand { get; set; }
         public ICommand SelectionChangedListViewCommand { get; set; }
         public ICommand TextChangedSearchByNameCommand { get; set; }
-
+        public ICommand CloseNewAccountFormCommand { get; set; }
+        public ICommand ShowNewAccountFormCommand { get; set; }
+        #region main accounts
+        public ICommand InsertMainCommand { get; set; }
+        public ICommand ModMainCommand { get; set; }
+        public ICommand SaveMainCommand { get; set; }
+        public ICommand ViewLoadedCommand { get; set; }
+        #endregion
+        #region end accounts
+        public ICommand SelectionChangedEndCommand { get; set; }
+        public ICommand DropOpenedChangedEndCommand { get; set; }
+        #endregion
         #endregion
         public AccountTableViewModel()
         {
@@ -133,7 +251,123 @@ namespace ViewModelsLib
             ModifyAccountCommand = new FrameWorkLib.DelegateCommand(ModifyAccount);
             InsertAccountCommand = new FrameWorkLib.DelegateCommand(InsertNewAccounts);
             SaveAccountCommand = new FrameWorkLib.DelegateCommand(Save);
+
+            // main
+            InsertMainCommand = new FrameWorkLib.DelegateCommand(Insert_Main);
+            ModMainCommand = new FrameWorkLib.DelegateCommand(Modify_Main);
+            SaveMainCommand = new FrameWorkLib.DelegateCommand(Save_Main);
+
+            ViewLoadedCommand = new FrameWorkLib.DelegateCommand(ViewLoaded);
+            // end
+            SelectionChangedEndCommand = new FrameWorkLib.DelegateCommand(SelectionChangedEnd);
+            DropOpenedChangedEndCommand = new FrameWorkLib.DelegateCommand(DropOpenedChangedEnd);
+
         }
+        private void DropOpenedChangedEnd()
+        {
+            try
+            {
+
+                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                accountsTableModel.GetEndAccounts(tuples);
+                List<string> list = new List<string>();
+                foreach (Tuple<string, int> tuple in tuples)
+                {
+                    list.Add(tuple.Item1);
+                }
+                EndAccountCmBxList = list;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void SelectionChangedEnd()
+        {
+            try
+            {
+                if (String.IsNullOrEmpty(this.SelectedEndAccount))
+                    return;
+                this.SelectedEndAccountID = accountsTableModel.GetEndAccount(this.SelectedEndAccount).Item2;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void ViewLoaded()
+        {
+            try
+            {
+                this.AccountsTable_Main = new AccountTable();
+                accountsTableModel.GetAccountsFromAccountTable(this.AccountsTable_Main, 0);
+                AccountsTable_Main.AcceptChanges();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void Save_Main()
+        {
+            try
+            {
+                accountsTableModel.UpdateAccountTable(AccountsTable_Main);
+                MessageBox.Show("تم الحفظ");
+                AccountsTable_Main.AcceptChanges();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void Modify_Main()
+        {
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void Insert_Main()
+        {
+            try
+            {
+                             
+               int endAccountID = int.Parse((((string)Endaccount_Main).Split('(', ',', ')')).ToArray()[2]);
+                
+                
+                AccountRow newAccountRow = AccountsTable_Main.NewAccountRow();
+                newAccountRow.Name = AccountName_Main;
+                newAccountRow.Code = int.Parse(AccountCode_Main);
+                newAccountRow.ParentID = 0;
+                newAccountRow.EndAccountID = endAccountID;
+                newAccountRow.Date = DateTime.Parse(AccountDate_Main).Date;
+
+                AccountsTable_Main.AddAccountsRow(newAccountRow);
+
+                MessageBox.Show("تم ادراج الحساب لحفظ التغيرات يرجاء الضغط على زر الحفظ");
+            }
+            catch (ArgumentNullException)
+            {
+                MessageBox.Show("يوجد حقل فارغ");
+            }
+            catch (ConstraintException ex)
+            {
+                MessageBox.Show($"يوجد حساب مشابة {ex.ToString()}");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -171,97 +405,102 @@ namespace ViewModelsLib
         /// <param name="parameter">listview instant</param>
         private void SelectionChangedListView(object parameter)
         {
-            try
-            {
-                ListView listView = (parameter as ListView);
-                if (listView.SelectedItem is null)
-                    return;
-                DataRowView selsectedRow = listView.SelectedItem as DataRowView;
-                int accountID = (int)selsectedRow["ID"];
-                DataTable table = new DataTable();
-                accountsTableModel.GetAccountsFromAccountTable_ByID(table, accountID);
-                if (table.Rows.Count > 0)
-                {
-                    foreach (DataRow accountRow in AccountTable.Rows)
-                    {
-                        if ((int)accountRow["ID"] == accountID)
-                        {
-                            if (accountRow.RowState == DataRowState.Unchanged)
-                                accountRow.SetModified();
-                        }
-                    }
-                    AccountName = selsectedRow["Name"] as string;
-                    AccountCode = (int)selsectedRow["Code"];
-                    AccountParent = new Tuple<string, int>((string)table.Rows[0][3], (int)table.Rows[0][1]);
-                    AccountEndAccount = new Tuple<string, int>((table.Rows[0][5] as string), (int)table.Rows[0][6]);
-                }
-                else //  if it is in the acccountTable not in the database
-                {
-                    // TODO (is done) this if the selsected item it recently added 
-                    // and not saved in the database
-                    if(AccountTable.Count > 0)
-                    {
-                        foreach(AccountRow accountRow in AccountTable.Rows)
-                        {
-                            if ((int)accountRow["ID"] == accountID)
-                            {
-                                if (accountRow.RowState == DataRowState.Unchanged)
-                                    accountRow.SetModified();
+            //try
+            //{
+            //    ListView listView = (parameter as ListView);
+            //    if (listView.SelectedItem is null)
+            //        return;
+            //    DataRowView selsectedRow = listView.SelectedItem as DataRowView;
+            //    int accountID = (int)selsectedRow["ID"];
+            //    DataTable table = new DataTable();
+            //    accountsTableModel.GetAccountsFromAccountTable_ByID(table, accountID);
+            //    if (table.Rows.Count > 0)
+            //    {
+            //        foreach (DataRow accountRow in AccountTable.Rows)
+            //        {
+            //            if ((int)accountRow["ID"] == accountID)
+            //            {
+            //                if (accountRow.RowState == DataRowState.Unchanged)
+            //                    accountRow.SetModified();
+            //            }
+            //        }
+            //        AccountName = selsectedRow["Name"] as string;
+            //        AccountCode = (int)selsectedRow["Code"];
+            //        AccountParent = new Tuple<string, int>((string)table.Rows[0][3], (int)table.Rows[0][1]);
+            //        AccountEndAccount = new Tuple<string, int>((table.Rows[0][5] as string), (int)table.Rows[0][6]);
+            //    }
+            //    else //  if it is in the acccountTable not in the database
+            //    {
+            //        // TODO (is done) this if the selsected item it recently added 
+            //        // and not saved in the database
+            //        if(AccountTable.Count > 0)
+            //        {
+            //            foreach(AccountRow accountRow in AccountTable.Rows)
+            //            {
+            //                if ((int)accountRow["ID"] == accountID)
+            //                {
+            //                    if (accountRow.RowState == DataRowState.Unchanged)
+            //                        accountRow.SetModified();
 
-                                AccountName = accountRow["Name"] as string;
+            //                    AccountName = accountRow["Name"] as string;
 
-                                AccountCode = (int)accountRow["Code"];
+            //                    AccountCode = (int)accountRow["Code"];
 
-                                Tuple<string, int> account = new Tuple<string, int>(string.Empty, 0);
+            //                    Tuple<string, int> account = new Tuple<string, int>(string.Empty, 0);
 
-                                int id = (int)accountRow["ParentID"];
+            //                    int id = (int)accountRow["ParentID"];
 
-                                accountsTableModel.GetAccountsFromAccountTable_ByID(ref account, id);
+            //                    accountsTableModel.GetAccountsFromAccountTable_ByID(ref account, id);
 
-                                AccountParent = new Tuple<string, int>(account.Item1, id);
+            //                    AccountParent = new Tuple<string, int>(account.Item1, id);
 
-                                id = (int)accountRow["EndAccountID"];
+            //                    id = (int)accountRow["EndAccountID"];
 
-                                accountsTableModel.GetEndAccount_ByID(ref account, id);
+            //                    accountsTableModel.GetEndAccount_ByID(ref account, id);
 
-                                AccountEndAccount = new Tuple<string, int>(account.Item1, id);
-                            }
-                        }
-                    }
-                }
+            //                    AccountEndAccount = new Tuple<string, int>(account.Item1, id);
+            //                }
+            //            }
+            //        }
+            //    }
 
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show(ex.Message);
+            //}
         }
         /// <summary>
         /// 
         /// </summary>
         private void ModifyAccount()
         {
-           try
-           {
+            try
+            {
                 if (!(ListViewSelectedItem is null))
                 {
                     DataRowView rowView = ListViewSelectedItem;
                     AccountRow accountRow = (AccountRow)AccountTable.Rows.Find(rowView["ID"]);
-                    if (accountRow.RowState == DataRowState.Modified)
-                    {
-                        accountRow.Name = AccountName;
-                        accountRow.Code = AccountCode;
-                        accountRow.ParentID = (AccountParent as Tuple<string, int>).Item2;
-                        accountRow.EndAccountID = (AccountEndAccount as Tuple<string, int>).Item2;
-                        MessageBox.Show("تم تعديل الحساب لحفظ التغيرات يرجاء الضغط على زر الحفظ");
 
+                    // don allow modify the account if its state is added
+                    if (accountRow.RowState == DataRowState.Added)
+                    {
+                        MessageBox.Show("احفظ الحساب ثم قم بتعديله");
+                        return;
                     }
+
+                    accountRow.Name = AccountName;
+                    accountRow.Code = int.Parse(AccountCode);
+                    accountRow.ParentID = accountsTableModel.GetAccount(AccountParent).Item2;
+                    accountRow.EndAccountID = accountsTableModel.GetEndAccount(SelectedEndAccount).Item2;
+                    accountRow.Date = DateTime.Parse(this.AccountDate);
+                    MessageBox.Show("تم تعديل الحساب لحفظ التغيرات يرجاء الضغط على زر الحفظ");
                 }
             }
-           catch(Exception ex)
-           {
+            catch (Exception ex)
+            {
                 MessageBox.Show(ex.Message);
-           }
+            }
         }
         /// <summary>
         /// 
@@ -285,48 +524,47 @@ namespace ViewModelsLib
                     if (accountTable.Rows.Count == 0)
                     {
                         AccountName = string.Empty;
-                        AccountCode = 0;
-                        AccountParent = null;
-                        AccountEndAccount = null;
+                        AccountCode = string.Empty;
+                        AccountParent = string.Empty;
+                        SelectedEndAccount = string.Empty;
                         AccountTable.Clear();
                         return;
                     }
                     DataRow accountRow = ((DataRow)accountTable.Rows[0]);
 
                     AccountName = accountRow[0] as string;
-                    int ParentID = (int)accountRow[1];
-                   
-                    string parentName = accountRow[3] as string;
-                    AccountParent = new Tuple<string, int> (parentName, ParentID);
 
-                    int AccountID = (int)accountRow[4];
-                    string endAccountName = accountRow[5] as string;
-                    int endAccountID = (int)accountRow[6];
-                    AccountEndAccount = new Tuple<string, int>(endAccountName, endAccountID);
+                    AccountParent = accountRow[3] as string;
+
+                    SelectedEndAccount = accountRow[5] as string;
                     // If this line moved up its value will change once the AccountEndAccount is set 
                     // becuase it will trigger the GetAccountCode
-                    AccountCode = (int)accountRow[2];
+                    AccountCode = ((int)accountRow[2]).ToString();
+
+                    AccountDate = ((DateTime)accountRow[7]).ToShortDateString();
                     // add the selected account to the account table
                     AccountTable.Clear();
                     AccountRow newAccountRow = AccountTable.NewAccountRow();
-                    newAccountRow.ID = AccountID;
+                    newAccountRow.ID = (int)accountRow[4];
                     newAccountRow.Name = AccountName;
-                    newAccountRow.Code = AccountCode;
+                    newAccountRow.Code = int.Parse(AccountCode);
                     // TODO: object not set to an instant exception occurs sometimes
-                    
-                    newAccountRow.ParentID = ParentID;
 
-                    newAccountRow.EndAccountID = endAccountID;
+                    newAccountRow.ParentID = (int)accountRow[1];
+
+                    newAccountRow.EndAccountID = (int)accountRow[6];
+
+                    newAccountRow.Date = ((DateTime)accountRow[7]);
 
                     AccountTable.AddAccountsRow(newAccountRow);
 
                     AccountTable.AcceptChanges();
-                    
+
                     isTableLoadedFromTreeView = true;
                     isTableLoadedFromSearch = false;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -352,16 +590,16 @@ namespace ViewModelsLib
         ///  this command occurs when the main account combo box selecttion changed occurs
         /// </summary>
         /// <param name="parameter">the combo box instant</param>
-        private void GetAccountCode(object parameter)
+        private void GetAccountCode()
         {
             try
             {
-                ComboBox comboBox = parameter as ComboBox;
-
-                if (!(comboBox.SelectedItem is null))
+                
+                if (!(String.IsNullOrEmpty(this.selectedAccountParent)))
                 {
-                    int parentID = (comboBox.SelectedItem as Tuple<string, int>).Item2;
+                    int parentID = accountsTableModel.GetAccount(this.selectedAccountParent).Item2;
 
+                    this.SelectedAccountParentID = parentID;
                     AccountTable table = new AccountTable();
 
                     // get the account children
@@ -375,13 +613,13 @@ namespace ViewModelsLib
 
                         int parentCode = account.Item2;
 
-                        AccountCode = Convert.ToInt32($"{parentCode}{1}");
+                        AccountCode = Convert.ToInt32($"{parentCode}{1}").ToString();
                     }
                     else
                     {
                         int id = parentID;
 
-                        AccountCode = FindMaxChildCode(table , id);
+                        AccountCode = FindMaxChildCode(table , id).ToString();
                     }
                 }
             }
@@ -441,88 +679,94 @@ namespace ViewModelsLib
         /// this command will search the database by name intered in the combo box
         /// </summary>
         /// <param name="parameter"></param>
-        private void SearchAccounts(object parameter)
+        private void SearchAccounts()
         {
             try
             {
-                ComboBox comboBox = parameter as ComboBox;
-                comboBox.IsDropDownOpen = true;
-                string name = comboBox.Text;
+                // if the user clear the textbox allow the user to make search again
+                if(String.IsNullOrEmpty(this.AccountParent))
+                {
+                    this.SelectedAccountParent = string.Empty;
+                    this.ListParentAccountCmBx = null;
+                    return;
+                }
+
+                // if there is a selection return
+                if (!String.IsNullOrEmpty(this.SelectedAccountParent))
+                    return;
+
+                this.IsDropOpenParentAccountCmBx = true;
+                string name = this.AccountParent;
                 List<Tuple<string, int>> allaccountsList = new List<Tuple<string, int>>();
                 accountsTableModel.GetAccountsFromAccountTable(allaccountsList, name);
-                comboBox.ItemsSource = allaccountsList;
+                List<string> list = new List<string>();
+                foreach(Tuple<string, int> tuple in allaccountsList)
+                {
+                    list.Add(tuple.Item1);
+                }
+                this.ListParentAccountCmBx = list;
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
-
         /// <summary>
         /// 
         /// </summary>
-        Random random = new Random(1);
         private void InsertNewAccounts()
         {
-            int previuosCode = AccountCode;
+            AccountTable.Clear();
+            int previuosCode = int.Parse(AccountCode);
             try
             {
                 // get the account children
                 AccountTable table = new AccountTable();
-                int parentID = 0; int endAccountID = 0;
-                if (AccountParent is Tuple<string, int>)
-                    parentID = ((Tuple<string, int>)AccountParent).Item2;
-                else
-                {
-                     parentID = int.Parse((((string)AccountParent).Split('(', ',', ')')).ToArray()[2]);
-                }
-                if (AccountEndAccount is Tuple<string, int>)
-                    endAccountID = (AccountEndAccount as Tuple<string, int>).Item2;
-                else
-                {
-                    endAccountID = int.Parse((((string)AccountEndAccount).Split('(', ',', ')')).ToArray()[2]);
-                }
+
+                int parentID = this.SelectedAccountParentID;
+
+
+                int endAccountID = this.selectedEndAccountID;
+               
                 // account code from database
                 accountsTableModel.GetAccountsFromAccountTable(table, parentID);
-                AccountCode = FindMaxChildCode(table, parentID);
+                AccountCode = FindMaxChildCode(table, parentID).ToString();
                 // account code from the current account table that is bieing inserted into
                 // if count is greater than 0
                 if (AccountTable.Count > 0)
                 {
                     int code = FindMaxChildCode(AccountTable, parentID);
                     // take the max
-                    if (code >= AccountCode)
-                        AccountCode = code;
+                    if (code >= int.Parse(AccountCode))
+                        AccountCode = code.ToString();
                     //
                 }
                 AccountRow newAccountRow = AccountTable.NewAccountRow();
-                newAccountRow.ID = random.Next(); 
+
                 newAccountRow.Name = AccountName;
-                newAccountRow.Code = AccountCode;
+                newAccountRow.Code = int.Parse(AccountCode);
                 newAccountRow.ParentID = parentID;
                 newAccountRow.EndAccountID = endAccountID;
+                newAccountRow.Date = DateTime.Parse(this.AccountDate);
 
-                AccountTable.AddAccountsRow(newAccountRow);
 
-                //AccountTable.AcceptChanges();
-
-                MessageBox.Show("تم ادراج الحساب لحفظ التغيرات يرجاء الضغط على زر الحفظ");
+                accountsTableModel.UpdateAccountTable(AccountTable);
+                MessageBox.Show("تم ادراج الحساب ");
             }
             catch (ArgumentNullException)
             {
                 MessageBox.Show("يوجد حقل فارغ");
-                AccountCode = previuosCode;
+                AccountCode = previuosCode.ToString();
             }
             catch (ConstraintException ex)
             {
                 MessageBox.Show($"يوجد حساب مشابة {ex.ToString()}");
 
-                AccountCode = previuosCode;
+                AccountCode = previuosCode.ToString();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                AccountCode = previuosCode;
+                AccountCode = previuosCode.ToString();
             }
         }
-
         private void Save()
         {
             try
@@ -532,32 +776,6 @@ namespace ViewModelsLib
                     MessageBox.Show("لم يتم ادراج حساب");
                     return;
                 }
-                // change the state of all rows
-                // the first row is modiflied allways
-                // the reset of rows are added
-                /*if (isTableLoadedFromTreeView == true)
-                {
-
-                    AccountTable.Rows[0].SetModified();
-                    for (int i = 1; i < AccountTable.Count; i++)
-                    {
-                        AccountTable.Rows[i].SetAdded();
-                    }
-                }
-                else if (isTableLoadedFromSearch == true)
-                {
-                    accountsTableModel.UpdateAccountTable(AccountTable);
-                    MessageBox.Show("تم الحفظ");
-                    AccountTable.Clear();
-                    return;
-                }
-                else
-                {
-                    for (int i = 0; i < AccountTable.Count; i++)
-                    {
-                        AccountTable.Rows[i].SetAdded();
-                    }
-                }*/
                 accountsTableModel.UpdateAccountTable(AccountTable);
                 MessageBox.Show("تم الحفظ");
                 AccountTable.Clear();

@@ -66,28 +66,6 @@ namespace BusinessLib
             DataAccess.CloseSqlConnection();
         }
         [Obsolete]
-        public void GetAllAccounts_ByParentID(List<string> list, Guid parentid)
-        {
-            list.Clear();
-            DataAccess.ExecuteQueryCommand($"Select * From Accounts Where ParentID = '{parentid}'", CommandType.Text);
-            DataAccess.OpenSqlConnection();
-            IDataReader dataReader = DataAccess.DataReader();
-            try
-            {
-                while (dataReader.Read())
-                {
-
-                    list.Add(dataReader[1].ToString());
-                }
-                DataAccess.CloseDataReader();
-                DataAccess.CloseSqlConnection();
-            }
-            catch (Exception ex)
-            {
-                System.Windows.Forms.MessageBox.Show(ex.Message);
-            }
-        }
-        [Obsolete]
         public void GetAccounts_ByParentID(List<string> list, int parentid)
         {
             list.Clear();
@@ -108,6 +86,109 @@ namespace BusinessLib
             {
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
+        }
+        public List<Tuple<int, int,string>> GetAccounts1()
+        {
+            List<Tuple<int, int, string>> list = new List<Tuple<int, int, string>>();
+            DataAccess.ExecuteQueryCommand($"Select dbo.Account.ID, dbo.Account.Code, dbo.Account.Name From dbo.Account", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                Tuple<int, int,string> tuple = new Tuple<int, int,string>
+                (
+                    (int)dataReader[0], (int)dataReader[1], (string)dataReader[2]
+                );
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return list;
+        }
+        public List<Tuple<int, int,string>> GetAccounts1(string name)
+        {
+            List<Tuple<int, int,string>> list = new List<Tuple<int, int,string>>();
+            DataAccess.ExecuteQueryCommand($"Select dbo.Account.ID, dbo.Account.Code, dbo.Account.Name From dbo.Account WHERE dbo.Account.Name LIKE '%{name}%'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                Tuple<int, int,string> tuple = new Tuple<int,int, string>
+                (
+                    (int)dataReader[0], (int)dataReader[1], (string)dataReader[2]
+                );
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return list;
+        }
+        public List<Tuple<int ,string>> GetAccounts()
+        {
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+            DataAccess.ExecuteQueryCommand($"Select dbo.Account.ID, dbo.Account.Name From dbo.Account", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                Tuple<int, string> tuple = new Tuple<int, string>
+                (
+                    (int)dataReader[0], (string)dataReader[1]
+                );
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return list;
+        }
+        public List<Tuple<int, string>> GetAccounts(string name)
+        {
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+            DataAccess.ExecuteQueryCommand($"Select dbo.Account.ID, dbo.Account.Name From dbo.Account WHERE dbo.Account.Name LIKE '{name}%'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                Tuple<int, string> tuple = new Tuple<int, string>
+                (
+                    (int)dataReader[0], (string)dataReader[1]
+                );
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            return list;
+        }
+        // 
+        /// <summary>
+        /// this will be used if we want to get the name and id of an account
+        /// </summary>
+        /// <param name="AllAccounts"></param>
+        public void GetAccounts(AccountTable accountTable)
+        {
+            accountTable.Clear();
+            DataAccess.ExecuteQueryCommand($"Select * From Account", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            while (dataReader.Read())
+            {
+                AccountRow accountRow = accountTable.NewAccountRow();
+                accountRow["ID"] = dataReader[0];
+                accountRow["Name"] = dataReader[1];
+                accountRow["ParentID"] = dataReader[2];
+                accountRow["Code"] = dataReader[3];
+                accountRow["EndAccountID"] = dataReader[4];
+                accountRow["Date"] = dataReader[5];
+                accountTable.AddAccountsRow(accountRow);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+            accountTable.AcceptChanges();
         }
         // 
         /// <summary>
@@ -201,11 +282,12 @@ namespace BusinessLib
             while (dataReader.Read())
             {
                 AccountRow accountRow = accountTable.NewAccountRow();
-                accountRow[0] = dataReader[0];
-                accountRow[1] = dataReader[1];
-                accountRow[2] = dataReader[2];
-                accountRow[3] = dataReader[3];
-                accountRow[4] = dataReader[4];
+                accountRow["ID"] = dataReader[0];
+                accountRow["Name"] = dataReader[1];
+                accountRow["ParentID"] = dataReader[2];
+                accountRow["Code"] = dataReader[3];
+                accountRow["EndAccountID"] = dataReader[4];
+                accountRow["Date"] = dataReader[5];
                 accountTable.AddAccountsRow(accountRow);
             }
             DataAccess.CloseDataReader();
@@ -217,13 +299,11 @@ namespace BusinessLib
         /// </summary>
         /// <param name="list"></param>
         /// <param name="name"></param>
-        [Obsolete]
         public void GetAccounts(List<Tuple<string, int>> list, string name)
         {
             list.Clear();
 
-
-            DataAccess.ExecuteQueryCommand($"Select * From Account Where Name = '{name}'", CommandType.Text);
+            DataAccess.ExecuteQueryCommand($"Select * From Account Where Name LIKE '%{name}%'", CommandType.Text);
             DataAccess.OpenSqlConnection();
             IDataReader dataReader = DataAccess.DataReader();
             try
@@ -243,6 +323,24 @@ namespace BusinessLib
                 System.Windows.Forms.MessageBox.Show(ex.Message);
             }
         }
+
+        public Tuple<string, int> GetAccount( string name)
+        {
+
+            DataAccess.ExecuteQueryCommand($"Select ID From Account Where Name = '{name}'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            Tuple<string, int> tuple = null;
+                while (dataReader.Read())
+                {
+                    tuple = new Tuple<string, int>(name
+                        , (int)dataReader[0]);
+                }
+                DataAccess.CloseDataReader();
+                DataAccess.CloseSqlConnection();
+            return tuple;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -252,8 +350,8 @@ namespace BusinessLib
         {
             table.Clear();
             DataAccess.ExecuteQueryCommand($"" +
-              $"SELECT TOP 10  Account.Name AS Expr1, Account_1.ID, Account.Code, Account_1.Name, Account.ID AS Expr4, EndAccount.Name AS Expr2, EndAccount.ID AS Expr3 " +
-              $"FROM           Account INNER JOIN Account AS Account_1 ON Account.ParentID = Account_1.ID INNER JOIN EndAccount ON Account.EndAccountID = EndAccount.ID " +
+              $"SELECT TOP 10    dbo.Account.ID, dbo.Account.Name, dbo.Account.Code, dbo.Account.Date, Account_1.Name AS ParentName, dbo.EndAccount.Name AS EndAccountName, Account_1.ID AS ParentID, dbo.EndAccount.ID AS EndAccountID " +
+              $"FROM           dbo.Account INNER JOIN dbo.Account AS Account_1 ON dbo.Account.ParentID = Account_1.ID INNER JOIN dbo.EndAccount ON dbo.Account.EndAccountID = dbo.EndAccount.ID " +
               $"Where          (Account.Name LIKE '{name}%')", CommandType.Text);
             DataAccess.OpenSqlConnection();
             IDataReader dataReader = DataAccess.DataReader();
@@ -333,7 +431,7 @@ namespace BusinessLib
         {
             dataTable.Clear();
             DataAccess.ExecuteQueryCommand($"" +
-              $"SELECT  Account.Name AS Expr1, Account_1.ID, Account.Code, Account_1.Name, Account.ID AS Expr4, EndAccount.Name AS Expr2, EndAccount.ID AS Expr3 " +
+              $"SELECT  Account.Name AS Expr1, Account_1.ID, Account.Code, Account_1.Name, Account.ID AS Expr4, EndAccount.Name AS Expr2, EndAccount.ID AS Expr3, dbo.Account.Date " +
               $"FROM    Account INNER JOIN Account AS Account_1 ON Account.ParentID = Account_1.ID INNER JOIN EndAccount ON Account.EndAccountID = EndAccount.ID " +
               $"Where   (Account.ID = '{id}')", CommandType.Text);
             DataAccess.OpenSqlConnection();
@@ -377,25 +475,27 @@ namespace BusinessLib
             {
                 if (dataRow.RowState == DataRowState.Added)
                 {
-                    SqlParameter[] sqlParameters = new SqlParameter[accountsTable.Columns.Count - 1];
+                    SqlParameter[] sqlParameters = new SqlParameter[5];
 
-                    sqlParameters[0] = new SqlParameter($"@{accountsTable.Columns[1].ColumnName}", dataRow[accountsTable.Columns[1].ColumnName]);
-                    sqlParameters[1] = new SqlParameter($"@{accountsTable.Columns[2].ColumnName}", dataRow[accountsTable.Columns[2].ColumnName]);
-                    sqlParameters[2] = new SqlParameter($"@{accountsTable.Columns[3].ColumnName}", dataRow[accountsTable.Columns[3].ColumnName]);
-                    sqlParameters[3] = new SqlParameter($"@{accountsTable.Columns[4].ColumnName}", dataRow[accountsTable.Columns[4].ColumnName]);
-                    
+                    sqlParameters[0] = new SqlParameter($"@{"Name"}", dataRow["Name"]);
+                    sqlParameters[1] = new SqlParameter($"@{"ParentID"}", dataRow["ParentID"]);
+                    sqlParameters[2] = new SqlParameter($"@{"Code"}", dataRow["Code"]);
+                    sqlParameters[3] = new SqlParameter($"@{"EndAccountID"}", dataRow["EndAccountID"]);
+                    sqlParameters[4] = new SqlParameter($"@{"Date"}", dataRow["Date"]);
                     DataAccess.ExecuteNonQueryCommand("spInsertAccount", CommandType.StoredProcedure, sqlParameters);
                     DataAccess.ExecuteNonQuery();
                 }
                 if (dataRow.RowState == DataRowState.Modified)
                 {
-                    SqlParameter[] sqlParameters = new SqlParameter[accountsTable.Columns.Count ];
+                    SqlParameter[] sqlParameters = new SqlParameter[6];
 
-                    for (int i = 0; i < accountsTable.Columns.Count; i++)
-                    {
-                        DataColumn dataColumn = accountsTable.Columns[i];
-                        sqlParameters[i] = new SqlParameter($"@{dataColumn.ColumnName}", dataRow[dataColumn.ColumnName]);
-                    }
+                    sqlParameters[0] = new SqlParameter($"@{"ID"}", dataRow["ID"]);
+                    sqlParameters[1] = new SqlParameter($"@{"Name"}", dataRow["Name"]);
+                    sqlParameters[2] = new SqlParameter($"@{"ParentID"}", dataRow["ParentID"]);
+                    sqlParameters[3] = new SqlParameter($"@{"Code"}", dataRow["Code"]);
+                    sqlParameters[4] = new SqlParameter($"@{"EndAccountID"}", dataRow["EndAccountID"]);
+                    sqlParameters[5] = new SqlParameter($"@{"Date"}", dataRow["Date"]);
+
                     DataAccess.ExecuteNonQueryCommand("spUpdateAccountTable", CommandType.StoredProcedure, sqlParameters);
                     DataAccess.ExecuteNonQuery();
                 }

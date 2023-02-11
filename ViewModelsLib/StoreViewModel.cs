@@ -12,7 +12,7 @@ using ModelsLib;
 
 namespace ViewModelsLib
 {
-    public class StoreViewModel : ViewModelBase
+    public class StoreViewModel : BindableBase
     {
         private readonly object lockToken = new object();
 

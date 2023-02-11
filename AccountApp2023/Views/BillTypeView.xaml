@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="AccountApp2023.Views.BillTypeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:viewModel="clr-namespace:ViewModelsLib;assembly=ViewModelsLib"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AccountApp2023.Views"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" FlowDirection="RightToLeft"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction 
+                Command="{Binding LoadBillTypeTableCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <UserControl.DataContext>
+        <viewModel:BillTypeViewModel x:Name="billTypeViewModel"/>
+    </UserControl.DataContext>
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Menu Grid.Row="0" Style="{StaticResource MenuStyle}"
+              Grid.ColumnSpan="3">
+            <MenuItem Style="{StaticResource MenuItemStyle}"
+                      Command="{Binding SaveBillTypeCommand}">
+                <MenuItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontSize="12" Text="  "  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                        <TextBlock Text="حفظ"/>
+                    </StackPanel>
+                </MenuItem.Header>
+            </MenuItem>
+        </Menu>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="اسم النمط" Margin="40,5,10,10"
+                   />
+        <TextBox Grid.Row="1" Grid.Column="1"
+                 Text="{Binding BillTypeName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="رقم النمط" Margin="40,5,10,10"
+                   />
+        <TextBox Grid.Row="2" Grid.Column="1"
+                  Text="{Binding BillTypeNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    </Grid>
+</UserControl>

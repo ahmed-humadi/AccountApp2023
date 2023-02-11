@@ -42,7 +42,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountTableModel.cs" />
+    <Compile Include="BillTableModel.cs" />
+    <Compile Include="BillTypeModel.cs" />
+    <Compile Include="CashDayModel.cs" />
     <Compile Include="CategoryTableModel.cs" />
+    <Compile Include="CurrencyModel.cs" />
     <Compile Include="DayTableModel.cs" />
     <Compile Include="EndAccountsTableModel.cs" />
     <Compile Include="ItemTableModel.cs" />
@@ -54,10 +58,17 @@
       <Project>{d465d713-f85b-4177-9244-924046dafadd}</Project>
       <Name>BusinessLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataAccessLib\DataAccessLib.csproj">
+      <Project>{b3a94c12-3bcd-4644-a9af-08031d62d32b}</Project>
+      <Name>DataAccessLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DataEntitiesLib\DataEntitiesLib.csproj">
-      <Project>{24E763CA-AEED-4FC4-BC2B-9B6DA72F7BBA}</Project>
+      <Project>{24e763ca-aeed-4fc4-bc2b-9b6da72f7bba}</Project>
       <Name>DataEntitiesLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

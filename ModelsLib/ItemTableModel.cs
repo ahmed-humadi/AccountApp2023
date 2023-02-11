@@ -14,14 +14,14 @@ namespace ModelsLib
         public ItemTableModel()
         {
             itemBL = new ItemBL();
+            categoryBL = new CategoryBL();
+            storeBL = new StoreBL();
         }
         public ItemTable GetItems()
         {
-           return itemBL.GetItems();
+            return itemBL.GetItems();
         }
-        public Tuple<string , int> GetGroup(int id)
         {
-            return itemBL.GetGroup(id);
         }
         public void UpdateItemTable(ItemTable itemTable)
         {
@@ -29,7 +29,6 @@ namespace ModelsLib
         }
         public Tuple<int, string> GetGroup(string name)
         {
-            return itemBL.GetGroup(name);
         }
     }
 }

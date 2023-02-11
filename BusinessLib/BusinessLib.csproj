@@ -176,7 +176,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountsBL.cs" />
+    <Compile Include="BillBL.cs" />
+    <Compile Include="BillTypeBL.cs" />
+    <Compile Include="CashDayBL.cs" />
     <Compile Include="CategoryBL.cs" />
+    <Compile Include="CostCenterBL.cs" />
+    <Compile Include="CurrencyBL.cs" />
     <Compile Include="DaysBL.cs" />
     <Compile Include="EndAccountsBL.cs" />
     <Compile Include="ItemBL.cs" />
@@ -192,6 +197,10 @@
     <ProjectReference Include="..\DataEntitiesLib\DataEntitiesLib.csproj">
       <Project>{24e763ca-aeed-4fc4-bc2b-9b6da72f7bba}</Project>
       <Name>DataEntitiesLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelLib1\ModelsLib1.csproj">
+      <Project>{94ae5567-27da-4e49-8b21-f986c014e722}</Project>
+      <Name>ModelsLib1</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

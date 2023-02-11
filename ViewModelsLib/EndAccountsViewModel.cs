@@ -16,17 +16,44 @@ using System.Windows.Controls;
 
 namespace ViewModelsLib
 {
-    public class EndAccountsViewModel : IDisposable , INotifyPropertyChanged
+    public class EndAccountsViewModel : FrameWorkLib.BindableBase, IDisposable
     {
         private EndAccountsTableModel endAccountModel;
 
         private bool disposedValue = false;
        
-        public event PropertyChangedEventHandler PropertyChanged;
+        private List<string> endAccountCmBxList;
+        public List<string> EndAccountCmBxList
+        {
+            get => endAccountCmBxList;
+            set
+            {
+                SetProperty(ref endAccountCmBxList, value);
+            }
+        }
 
+        private string selectedEndAccount;
+        public string SelectedEndAccount
+        {
+            get => selectedEndAccount;
+            set
+            {
+                SetProperty(ref selectedEndAccount, value);
+            }
+        }
+        internal int selectedEndAccountID;
+        internal int SelectedEndAccountID
+        {
+            get => selectedEndAccountID;
+            set
+            {
+                SetProperty(ref selectedEndAccountID, value);
+            }
+        }
         public ICommand InsertAccountCommand { get; set; }
         public ICommand ShowAccountCommand { get; set; }
         public ICommand ModifyAccountCommand { get; set; }
+        public ICommand SelectionChangedCommand { get; set; }
         public ICommand SaveAccountCommand { get; set; }
         public EndAccountsViewModel()
         {
@@ -35,17 +62,36 @@ namespace ViewModelsLib
             ShowAccountCommand = new DelegateCommand(ShowAccount);
             ModifyAccountCommand = new DelegateCommand(ModifyAccount);
             SaveAccountCommand = new DelegateCommand(SaveEndAccount);
+            SelectionChangedCommand = new DelegateCommand(SelectionChanged);
         }
-        private void ShowAccount(object parameter)
+
+        private void SelectionChanged()
         {
             try
             {
-                ComboBox comboBox = parameter as ComboBox;
+                if (String.IsNullOrEmpty(this.SelectedEndAccount))
+                    return;
+                this.SelectedEndAccountID = endAccountModel.GetAccount(this.SelectedEndAccount).Item2;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
 
-                List<Tuple<string, int>> list = new List<Tuple<string, int>>();
-                endAccountModel.GetEndAccounts(list);
-              
-                comboBox.ItemsSource = list;
+        private void ShowAccount()
+        {
+            try
+            {
+
+                List<Tuple<string, int>> tuples = new List<Tuple<string, int>>();
+                endAccountModel.GetEndAccounts(tuples);
+                List<string> list = new List<string>();
+                foreach(Tuple<string, int> tuple in tuples)
+                {
+                    list.Add(tuple.Item1);
+                }
+                EndAccountCmBxList = list;
             }
             catch(Exception ex) { MessageBox.Show(ex.Message); }
         }

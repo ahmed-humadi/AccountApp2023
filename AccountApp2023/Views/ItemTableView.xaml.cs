@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ViewModelsLib;
 using ModelsLib;
+using System.Windows.Media.Animation;
+
 namespace AccountApp2023.Views
 {
     /// <summary>

@@ -49,16 +49,24 @@ namespace ViewModelsLib
             }
         }
 
-        private string dayID;
-        public string DayID 
+        private string dayNumber;
+        public string DayNumber 
         { 
+            get => dayNumber;
+            set
+            {
+                SetProperty<string>(ref dayNumber, value);
+            }
+        }
+        private string dayID;
+        public string DayID
+        {
             get => dayID;
             set
             {
                 SetProperty<string>(ref dayID, value);
             }
         }
-
         private string dayDate;
         public string DayDate
         {
@@ -163,7 +171,6 @@ namespace ViewModelsLib
                 ((FrameWorkLib.DelegateCommand)SaveDaysCommand).RaiseCanExecuteChanged();
             }
         }
-
         private bool isEditing = false;
         public bool IsEditing
         {
@@ -174,7 +181,6 @@ namespace ViewModelsLib
                 ((FrameWorkLib.DelegateCommand)ModDaysCommand).RaiseCanExecuteChanged();
             }
         }
-
         private bool isLoading = false;
         public bool IsLoading
         {
@@ -267,12 +273,16 @@ namespace ViewModelsLib
 
                         // day1 data type
                         this.DayType = 0;  // سند قيد الدرس 29
-                        this.Day_Note = this.DayID + "/" + "سند قيد";
-                        Tuple<DateTime, string, int, string> parametersTupleDay1 = new Tuple<DateTime, string, int, string>(
+                        this.Day_Note = this.DayNumber + "/" + "سند قيد";
+                        Tuple<DateTime, string, int, string, int> parametersTupleDay1 = new Tuple<DateTime, string, int, string, int>
+                        (
 
-                            DateTime.Parse(this.DayDate), this.DayNote, this.DayType, this.Day_Note);
+                            DateTime.Parse(this.DayDate), this.DayNote, this.DayType, this.Day_Note, int.Parse(this.DayNumber)
+                            );
 
                         dayTableModel.InsertDay1(parametersTupleDay1);
+                        // after we save day1 take number and get the id
+                        this.DayID = dayTableModel.GetDay1ID(int.Parse(this.DayNumber)).ToString();
 
                         // day2 data type
                         AddDay2();
@@ -302,7 +312,7 @@ namespace ViewModelsLib
                 if (!String.IsNullOrEmpty(dayTable.AccountID)) // skip the empty rows
                 {
                     // do not save them
-                    int parentID = int.Parse(this.dayID);
+                    int parentID = int.Parse(this.DayID);
                     int Debit;
                     int Credit;
                     string note = string.Empty;
@@ -312,7 +322,7 @@ namespace ViewModelsLib
                         Credit = 0;
                     // الدرس 25
                     if (String.IsNullOrEmpty(dayTable.Note))
-                        note = this.DayID + "/" + "سند قيد";
+                        note = this.DayNumber + "/" + "سند قيد";
                     else
                         note = dayTable.Note;
 
@@ -352,11 +362,13 @@ namespace ViewModelsLib
 
                         // day1 data type
                         this.DayType = 0;  // سند قيد الدرس 29
-                        this.Day_Note = this.DayID + "/" + "سند قيد";
-                        int dayid = int.Parse(this.DayID);
-                        Tuple<DateTime, string, int, string> parametersTupleDay1 = new Tuple<DateTime, string, int, string>(
+                        this.Day_Note = this.DayNumber + "/" + "سند قيد";
+                        int dayid = int.Parse(this.DayNumber);
+                        Tuple<DateTime, string, int, string,int> parametersTupleDay1 = new Tuple<DateTime, string, int, string, int>(
 
-                            DateTime.Parse(this.DayDate), this.DayNote, this.DayType, this.Day_Note);
+                            DateTime.Parse(this.DayDate), this.DayNote, this.DayType, this.Day_Note, dayid
+
+                            );
 
                         dayTableModel.UpdateDay1(parametersTupleDay1, dayid);
 
@@ -389,7 +401,7 @@ namespace ViewModelsLib
             try
             {
                 // get new day id
-                DayID = dayTableModel.GetMax_1DayID().ToString();
+                DayNumber = dayTableModel.GetMax_1DayNumber().ToString();
 
                 // enable 
                 this.ISEnable_AddButton = true;
@@ -419,10 +431,10 @@ namespace ViewModelsLib
                 System.Windows.Controls.TextBox dayidTxtBx = parameter as System.Windows.Controls.TextBox;
                 if (!dayidTxtBx.IsKeyboardFocusWithin)
                     return;
-                if(!String.IsNullOrEmpty(dayID))
+                if(!String.IsNullOrEmpty(dayNumber))
                 {
                     List<Tuple<double, double, int, string, int, int, string>> day =
-                        dayTableModel.GetDay2(int.Parse(dayID));
+                        dayTableModel.GetDay2(int.Parse(dayNumber));
                     dataGridCollection.Clear();
 
                 }
@@ -433,7 +445,7 @@ namespace ViewModelsLib
         {
             try
             {
-                this.DayID = dayTableModel.GetMinDayID().ToString();
+                this.DayNumber = dayTableModel.GetMinDayNumber().ToString();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -441,7 +453,7 @@ namespace ViewModelsLib
         {
             try
             {
-                this.DayID = dayTableModel.GetMaxDayID().ToString();
+                this.DayNumber = dayTableModel.GetMaxDayNumber().ToString();
             }
             catch (Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -449,7 +461,7 @@ namespace ViewModelsLib
         {
             try
             {
-                this.DayID = dayTableModel.GetMax_1DayID().ToString();
+                this.DayNumber = dayTableModel.GetMax_1DayNumber().ToString();
             }
             catch(Exception ex) { MessageBox.Show(ex.Message); }
         }
@@ -729,13 +741,13 @@ namespace ViewModelsLib
          
             try
             {
-                int min = dayTableModel.GetMinDayID();
+                int min = dayTableModel.GetMinDayNumber();
 
-                int dayid = int.Parse(DayID);
+                int daynumner = int.Parse(DayNumber);
 
-                dayid = dayid - 1;
+                daynumner = daynumner - 1;
 
-                if (dayid < min)
+                if (daynumner < min)
                     return;
 
                 //this.ISEnable_AddButton = false;
@@ -746,20 +758,22 @@ namespace ViewModelsLib
                 this.IsEditing = true;
                 IsLoading = true;
 
-                await Task.Run(() => {
-                
+                await Task.Run(() =>
+                {
+
                     // day 1
-                    Tuple<int, DateTime, string, int> day1Table =  dayTableModel.GetDay1(dayid);
+                    Tuple<int, DateTime, string, int> day1Table = dayTableModel.GetDay1(daynumner);
 
                     // day 2
+                    int parentID = day1Table.Item1;
+                    List<Tuple<double, double, int, string, int, int, string>> day2List = dayTableModel.GetDay2(parentID);
 
-                    List<Tuple<double, double, int, string, int, int, string>> day2List = dayTableModel.GetDay2(dayid);
+                    System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                    {
 
-                    System.Windows.Application.Current.Dispatcher.Invoke(() =>{
-                    
                         // fill day view
 
-                        this.DayID = dayid.ToString();
+                        this.DayNumber = daynumner.ToString();
 
                         this.DayDate = day1Table.Item2.ToString();
 
@@ -797,13 +811,13 @@ namespace ViewModelsLib
         {
             try
             {
-                int max = dayTableModel.GetMaxDayID();
+                int max = dayTableModel.GetMaxDayNumber();
 
-                int dayid = int.Parse(DayID);
+                int daynumber = int.Parse(DayNumber);
 
-                dayid = dayid + 1;
+                daynumber = daynumber + 1;
 
-                if (dayid > max)
+                if (daynumber > max)
                     return;
 
                 //this.ISEnable_AddButton = false;
@@ -817,17 +831,17 @@ namespace ViewModelsLib
                 await Task.Run(() => {
 
                     // day 1
-                    Tuple<int, DateTime, string, int> day1Table = dayTableModel.GetDay1(dayid);
+                    Tuple<int, DateTime, string, int> day1Table = dayTableModel.GetDay1(daynumber);
 
                     // day 2
-
-                    List<Tuple<double, double, int, string, int, int, string>> day2List = dayTableModel.GetDay2(dayid);
+                    int parentID = day1Table.Item1;
+                    List<Tuple<double, double, int, string, int, int, string>> day2List = dayTableModel.GetDay2(parentID);
 
                     System.Windows.Application.Current.Dispatcher.Invoke(() => {
 
                         // fill day view
 
-                        this.DayID = dayid.ToString();
+                        this.DayNumber = daynumber.ToString();
 
                         this.DayDate = day1Table.Item2.ToString();
 

@@ -24,17 +24,9 @@ namespace AccountingAppMainWind.Views
     /// </summary>
     public partial class AccountsWinView : Window
     {
-        public AccountTableViewModel AccountsGuideViewModel { get; set; }
-
-        public EndAccountsViewModel EndAccountsViewModel { get; set; }
         public AccountsWinView()
         {
             InitializeComponent();
-
-            AccountsGuideViewModel = new AccountTableViewModel();
-            EndAccountsViewModel = new EndAccountsViewModel();
-
-            this.DataContext = this;
         }
     }
 }

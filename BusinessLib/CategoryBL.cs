@@ -34,6 +34,119 @@ namespace BusinessLib
             }
         }
 
+        public Tuple<string, int> GetGroup(int id)
+        {
+            DataAccess.ExecuteQueryCommand($"Select Name From Category Where ID = '{id}'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            Tuple<string, int> tuple = null;
+
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<string, int>(
+                    (string)dataReader[0], id);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return tuple;
+        }
+        public Tuple<int, string> GetGroup(string name)
+        {
+            DataAccess.ExecuteQueryCommand($"Select ID From Category Where Name = '{name}'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            Tuple<int, string> tuple = null;
+
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<int, string>(
+                    (int)dataReader[0], name);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return tuple;
+        }
+        public List<string> GetGroups(string name)
+        {
+            DataAccess.ExecuteQueryCommand($"Select TOP 10 Name From Category Where Name LIKE '%{name}%'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<string> list = new List<string>();
+
+
+            while (dataReader.Read())
+            {
+                list.Add((string)dataReader[0]);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
+        
+        public List<Tuple<int, string>> GetGroups1(string name)
+        {
+            DataAccess.ExecuteQueryCommand($"Select ID, Name From Category Where Name LIKE '%{name}%'", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+
+            Tuple<int, string> tuple;
+
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<int, string>((int)dataReader[0],
+                    (string)dataReader[1]);
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
+        public List<string> GetGroups()
+        {
+            DataAccess.ExecuteQueryCommand($"Select Name From Category", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<string> list = new List<string>();
+
+            while (dataReader.Read())
+            {
+                list.Add((string)dataReader[0]);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
+        public List<Tuple<int, string>> GetGroups1()
+        {
+            DataAccess.ExecuteQueryCommand($"Select Top 100 ID, Name From Category", CommandType.Text);
+            DataAccess.OpenSqlConnection();
+            IDataReader dataReader = DataAccess.DataReader();
+
+            List<Tuple<int, string>> list = new List<Tuple<int, string>>();
+            Tuple<int, string> tuple;
+            while (dataReader.Read())
+            {
+                tuple = new Tuple<int, string>((int)dataReader[0],
+                    (string)dataReader[1]);
+                list.Add(tuple);
+            }
+            DataAccess.CloseDataReader();
+            DataAccess.CloseSqlConnection();
+
+            return list;
+        }
+
         /// <summary>
         /// get all categories
         /// </summary>

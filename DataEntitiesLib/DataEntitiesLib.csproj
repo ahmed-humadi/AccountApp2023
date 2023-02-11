@@ -44,6 +44,9 @@
     <Compile Include="AccountTable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="CurrencyTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="CategoryTable.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -8,7 +8,9 @@
              xmlns:Model="clr-namespace:ModelsLib;assembly=ModelsLib"
              xmlns:UC="clr-namespace:AccountApp2023.CustUserCont"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"         
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"       
+             xmlns:framework="clr-namespace:FrameWorkLib;assembly=FrameWorkLib"
+             xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2" x:Class="AccountApp2023.Views.ItemTableView"         
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" FlowDirection="RightToLeft">
     <i:Interaction.Triggers>
@@ -17,6 +19,18 @@
                 Command="{Binding ViewLoadedCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
+    <UserControl.InputBindings>
+        <KeyBinding Key="S" Modifiers="Ctrl"
+               Command="{Binding SaveItemCommand}"/>
+        <KeyBinding Key="M" Modifiers="Shift"
+               Command="{Binding GroupSearchCommand}"/>
+        <KeyBinding Key="C" Modifiers="Ctrl"
+               Command="{Binding CloseFormCommand}"/>
+        <KeyBinding Key="N" Modifiers="Ctrl"
+               Command="{Binding CreateNewItemCommand}"/>
+        <KeyBinding Key="Return"
+               Command="{Binding ItemSearchCommand}"/>
+    </UserControl.InputBindings>
     <UserControl.DataContext>
         <viewModel:ItemTableViewModel/>
     </UserControl.DataContext>
@@ -92,8 +106,37 @@
             <TextBlock x:Name="ItemCategorytxtBlck" TextWrapping="Wrap" Text="المجموعة" Grid.Row="7" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <UC:MyComboBox x:Name="ItemCategoryCmbBx"  Text="{Binding ItemGroup}" IsEditable="True" Grid.Row="7" Grid.Column="1"   VerticalAlignment="Stretch" Grid.ColumnSpan="2"
                     TextBoxBase.TextChanged="ItemCategoryCmbBx_TextChanged" 
-                   
-                    IsDropDownOpen="{Binding ItemGroupIsDropedOpen}">
+
+            </TextBox>
+            <TextBlock x:Name="ItemNotxtBlck"  Text="رقم الصنف * "  Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="ItemNotxtBx" Text="{Binding ItemCode, UpdateSourceTrigger=PropertyChanged}"  Grid.Row="3" Grid.Column="2" TextWrapping="Wrap"  VerticalAlignment="Stretch" Grid.ColumnSpan="2" 
+                                
+                                      Style="{StaticResource ResourceKey=TextBoxStyle}"/>
+            <TextBlock x:Name="ItemBrandtxtBlck_" TextWrapping="Wrap" Text="الشركة" Grid.Row="5" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="ItemBrandtxtBx" TextWrapping="Wrap" Text="{Binding ItemBrand, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"  VerticalAlignment="Stretch" Grid.ColumnSpan="2"
+                                      Style="{StaticResource ResourceKey=TextBoxStyle}"/>
+            <TextBlock x:Name="ItemCategorytxtBlck" Text="المجموعة * " Grid.Row="7" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <UC:MyComboBox  x:Name="ItemCategoryCmbBx" Grid.Row="7" Grid.Column="2"  
+                            VerticalAlignment="Stretch" Grid.ColumnSpan="2"
+                            BorderBrush="Gray"
+                            IsEditable="True"
+                            IsTextSearchEnabled="False"
+                            Text="{Binding ItemGroup,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                            SelectedItemID="{Binding SelectedItemGroupID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding GroupsList}"
+                            IsLoading ="{Binding IsLoading_Group}"       
+                            Style="{StaticResource MyComboBoxStyleSearchable}"
+                            IsDropDownOpen="{Binding ItemGroupIsDropedOpen}">
+                <!--this to recieve data as tuples-->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Item1}"
+                                   Width="30"/>
+                            <TextBlock Text="{Binding Item2}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="SelectionChanged"
                                     >
@@ -107,14 +150,57 @@
                     </i:EventTrigger>
                     
                 </i:Interaction.Triggers>
-                
+            </UC:MyComboBox>
+            <!--Item Store each item should be assigned to a store-->
+            <TextBlock x:Name="ItemStoretxtBlck" Text="المستودع * " Grid.Row="9" Grid.Column="1"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <UC:MyComboBox  x:Name="ItemStoreCmbBx" Grid.Row="9" Grid.Column="2"  
+                            IsEnabled="False"
+                            VerticalAlignment="Stretch" Grid.ColumnSpan="2"
+                            BorderBrush="Gray"
+                            IsEditable="True"
+                            IsTextSearchEnabled="False"
+                            Text="{Binding ItemStore,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" 
+                            SelectedItemID="{Binding SelectedItemStoreID, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                            ItemsSource="{Binding StoresList}"
+                            IsLoading ="{Binding IsLoading_Store}"       
+                            Style="{StaticResource MyComboBoxStyleSearchable}"
+                            IsDropDownOpen="{Binding ItemStoreIsDropedOpen}">
+                <!--this to recieve data as tuples-->
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Item1}"
+                                   Width="30"/>
+                            <TextBlock Text="{Binding Item2}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged"
+                                    >
+                        <i:InvokeCommandAction 
+                            Command="{Binding GroupSelectionChangedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="TextChanged"
+                                    >
+                        <i:InvokeCommandAction 
+                            Command="{Binding GroupTextChangedCommand}"/>
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="SearchButtonClick"
+                                    >
+                        <i:InvokeCommandAction 
+                            Command="{Binding StoreSearchCommand}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </UC:MyComboBox>
+
             </UC:MyComboBox>
             <TextBlock x:Name="ItemEnglishNametxtBlck" TextWrapping="Wrap" Text="الاسم الاجنبي" Grid.Row="9" Grid.Column="0"  VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBox x:Name="ItemEnglishNametxtBx"  TextWrapping="Wrap"  Text=""   Grid.Row="9" Grid.Column="1"  TextAlignment="Right" VerticalAlignment="Stretch" Grid.ColumnSpan="2"/>
             <TextBlock x:Name="ItemDatetxtBlck"   TextWrapping="Wrap"  Grid.Row="13" Grid.Column="0" Text="التاريخ" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <DatePicker Name="ItemDatetxtBx" Grid.Row="13" Grid.Column="1"
-                                SelectedDate="{Binding Mode=OneWay,  
-                                Source={x:Static sys:DateTime.Now}, 
+                            SelectedDate="{Binding Mode=OneWay,  
+                            Source={x:Static sys:DateTime.Now}, 
                                 StringFormat=yyyy/MM/dd}" SelectedDateFormat="Short" Grid.ColumnSpan="2"
                             IsEnabled="{Binding dayTableViewModel.ISEnable_Date }"
                                  Text="{Binding ItemDate,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
@@ -131,11 +217,11 @@
             <TextBlock x:Name="ItemModDatetxtBlck1"  Text="{Binding ItemModDate}" Grid.Row="9" Grid.Column="4" TextAlignment="Center" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
         </Grid>
         <ListView x:Name="ItemsListView" Grid.Row="2" 
-                  ItemsSource="{Binding ItemTable.DefaultView}"  
+                      ItemsSource="{Binding ItemTable.DefaultView}"
                   >
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <VirtualizingStackPanel/>
+                            <VirtualizingStackPanel/>
                 </DataTemplate>
             </ListView.ItemTemplate>
             <ListView.ItemContainerStyle>
@@ -144,7 +230,7 @@
                     <Setter Property="Foreground" Value="Black"/>
                 </Style>
             </ListView.ItemContainerStyle>
-            <ListView.View>
+                    <ListView.View>
                 <GridView>
                     <GridView.ColumnHeaderContainerStyle>
                         <Style TargetType="GridViewColumnHeader">
@@ -160,8 +246,8 @@
                     <GridViewColumn Header="الوصف"     Width="150" DisplayMemberBinding="{Binding Note}"/>
                     <GridViewColumn Header="اخر تعديل" Width="130" DisplayMemberBinding="{Binding ModDate}"/>
                     <GridViewColumn Header="الوحدة"    Width="110" DisplayMemberBinding="{Binding Unit}"/>
-                </GridView>
-            </ListView.View>
+                        </GridView>
+                    </ListView.View>
         </ListView>
     </Grid>
 </UserControl>

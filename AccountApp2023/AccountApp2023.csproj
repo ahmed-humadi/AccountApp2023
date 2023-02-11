@@ -38,6 +38,7 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero2" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -58,22 +59,46 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\DayNetConverter.cs" />
+    <Compile Include="CustUserCont\GridViewColumnBehaviour.cs" />
+    <Compile Include="CustUserCont\HamburgerMenu.cs" />
+    <Compile Include="CustUserCont\HamburgerMenuItem.cs" />
     <Compile Include="CustUserCont\Loading.cs" />
     <Compile Include="CustUserCont\MyComboBox.cs" />
     <Compile Include="CustUserCont\MyDataGird.cs" />
+    <Compile Include="CustUserCont\MyListView.cs" />
     <Compile Include="CustUserCont\MyTreeView.cs" />
     <Compile Include="CustUserCont\NavigationControl.xaml.cs">
       <DependentUpon>NavigationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustUserCont\SearchTextBox.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AccountsWinView.xaml.cs">
       <DependentUpon>AccountsWinView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\AccountTableView.xaml.cs">
+      <DependentUpon>AccountTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BillTableView.xaml.cs">
+      <DependentUpon>BillTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BillTypeView.xaml.cs">
+      <DependentUpon>BillTypeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CashDayView.xaml.cs">
+      <DependentUpon>CashDayView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CategoryView.xaml.cs">
       <DependentUpon>CategoryView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CostCenterTableView.xaml.cs">
+      <DependentUpon>CostCenterTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CurrencyTableView.xaml.cs">
+      <DependentUpon>CurrencyTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DayTableView.xaml.cs">
       <DependentUpon>DayTableView.xaml</DependentUpon>
@@ -84,6 +109,7 @@
     <Compile Include="Views\StoreView.xaml.cs">
       <DependentUpon>StoreView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\IView.cs" />
     <Page Include="CustUserCont\NavigationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -120,7 +146,31 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\AccountTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BillTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BillTypeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CashDayView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CategoryView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CostCenterTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CurrencyTableView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -155,6 +205,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\SEGMDL2.TTF" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

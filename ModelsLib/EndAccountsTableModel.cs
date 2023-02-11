@@ -18,6 +18,9 @@ namespace ModelsLib
         {
             endAccountsBL.GetAccounts(accountsList);
         }
-
-    }
+        public Tuple<string, int> GetAccount(string name)
+        {
+            return endAccountsBL.GetAccount(name);
+        }
+    } 
 }

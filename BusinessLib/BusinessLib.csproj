@@ -179,6 +179,7 @@
     <Compile Include="CategoryBL.cs" />
     <Compile Include="DaysBL.cs" />
     <Compile Include="EndAccountsBL.cs" />
+    <Compile Include="ItemBL.cs" />
     <Compile Include="MainAccountsBL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreBL.cs" />

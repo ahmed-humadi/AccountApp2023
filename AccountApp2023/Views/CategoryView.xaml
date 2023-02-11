@@ -16,11 +16,7 @@
                 Command="{Binding categoryViewModel.LoadedCategoryViewCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
-    
-
     <Grid Background="White">
-
         <Grid.RowDefinitions>
             <RowDefinition x:Name="menu" Height="25"/>
             <RowDefinition x:Name="flieds" Height="60"/>
@@ -28,32 +24,7 @@
         </Grid.RowDefinitions>
         <Grid x:Name="menuGrid">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <!--ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="50"/>
-                    <ColumnDefinition Width="*"/-->
             </Grid.ColumnDefinitions>
-
-            <!--Button Grid.Column="1"
-
-                    Background="Transparent"
-                    Content="ادراج"
-                    Style="{StaticResource buttonsStyle}"
-                    Command="{Binding categoryViewModel.InsertCommand}">
-
-                </Button>
-                <Button Grid.Column="2"
-                    Style="{StaticResource buttonsStyle}"
-                    Content="تعديل"
-                    Command="{Binding categoryViewModel.ModCommand}">
-
-                </Button>
-                <Button Grid.Column="3"
-                    Style="{StaticResource buttonsStyle}"
-                    Content="حفظ"
-                    Command="{Binding categoryViewModel.SaveCommand}">
-
-                </Button-->
             <Menu>
                 <MenuItem x:Name="AllAccountInsert" Command="{Binding categoryViewModel.InsertCommand}"
                                   >
@@ -133,7 +104,6 @@
                                                     DisplayMemberBinding="{Binding ID}"/>
                     <GridViewColumn Header="اسم المجموعة" Width="400"
                                                     DisplayMemberBinding="{Binding Name}"/>
-                  
 
                 </GridView>
             </ListView.View>

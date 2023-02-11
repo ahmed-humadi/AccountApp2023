@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="Converter\DayNetConverter.cs" />
     <Compile Include="CustUserCont\Loading.cs" />
+    <Compile Include="CustUserCont\MyComboBox.cs" />
     <Compile Include="CustUserCont\MyDataGird.cs" />
     <Compile Include="CustUserCont\MyTreeView.cs" />
     <Compile Include="CustUserCont\NavigationControl.xaml.cs">
@@ -76,6 +77,9 @@
     </Compile>
     <Compile Include="Views\DayTableView.xaml.cs">
       <DependentUpon>DayTableView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ItemTableView.xaml.cs">
+      <DependentUpon>ItemTableView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\StoreView.xaml.cs">
       <DependentUpon>StoreView.xaml</DependentUpon>
@@ -124,6 +128,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ItemTableView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\StoreView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +177,10 @@
     <ProjectReference Include="..\FrameWorkLib\FrameWorkLib.csproj">
       <Project>{667833d8-e53c-49ad-9615-7befd15779d2}</Project>
       <Name>FrameWorkLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ModelsLib\ModelsLib.csproj">
+      <Project>{65ec5cdd-ab90-4257-ab01-5b8a24d1a367}</Project>
+      <Name>ModelsLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\ViewModelsLib\ViewModelsLib.csproj">
       <Project>{26167ac2-0956-4a17-980d-a09886ece054}</Project>

@@ -49,7 +49,7 @@
     <Compile Include="CategoryViewModel.cs" />
     <Compile Include="DayTableViewModel.cs" />
     <Compile Include="EndAccountsViewModel.cs" />
-    <Compile Include="ItemsViewModel.cs" />
+    <Compile Include="ItemTableViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreViewModel.cs" />
   </ItemGroup>

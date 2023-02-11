@@ -382,6 +382,18 @@
                             </StackPanel>
                         </MenuItem.Header>
                     </MenuItem>
+                    <MenuItem x:Name="SideMenu_MenuItem_43_Display" 
+                              Click="SideMenuItem_Click">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock TextAlignment="Center" 
+                                       Text="&#xE1DA; " 
+                                       FontFamily="Segoe MDL2 Assets"/>
+                                <TextBlock TextAlignment="Center" 
+                                       Text="المواد"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="SideMenu_MenuItem_3_Display"
                           Style="{DynamicResource MenuItemStyle1}" 

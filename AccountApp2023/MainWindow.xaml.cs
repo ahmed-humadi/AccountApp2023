@@ -82,7 +82,18 @@ namespace AccountApp2023
                 {
                     ShowStoreTableView(tabItem);
                 }
+                else if (menuItem.Name.Equals("SideMenu_MenuItem_43_Display"))
+                {
+                    ShowItemTableView(tabItem);
+                }
             }
+        }
+
+        private void ShowItemTableView(TabItem tabItem)
+        {
+            ItemTableView itemTableView = new ItemTableView();
+            tabItem.Width = itemTableView.Width;
+            tabItem.Content = itemTableView;
         }
 
         private void ShowStoreTableView(TabItem tabItem)

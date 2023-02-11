@@ -50,6 +50,9 @@
     <Compile Include="EndAccountsTable.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="ItemTable.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StoreTable.cs">
       <SubType>Component</SubType>

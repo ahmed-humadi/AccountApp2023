@@ -1,0 +1,91 @@
+﻿<UserControl x:Class="AccountApp2023.Views.CategoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AccountApp2023.Views"
+             mc:Ignorable="d" 
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:UC ="clr-namespace:AccountApp2023.CustUserCont"
+             d:DesignHeight="600" d:DesignWidth="1000" FlowDirection="RightToLeft"
+              >
+
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction
+                Command="{Binding categoryViewModel.LoadedCategoryViewCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+
+    <Grid Background="White">
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="menu" Height="25"/>
+            <RowDefinition x:Name="flieds" Height="60"/>
+            <RowDefinition x:Name="dataGrid" Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="menuGrid" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0"
+                    Content="ادراج"
+                    Style="{StaticResource buttonsStyle}"
+                    Command="{Binding categoryViewModel.InsertCommand}">
+
+            </Button>
+            <Button Grid.Column="1"
+                    Style="{StaticResource buttonsStyle}"
+                    Content="تعديل"
+                    Command="{Binding categoryViewModel.ModCommand}">
+
+            </Button>
+            <Button Grid.Column="2"
+                    Style="{StaticResource buttonsStyle}"
+                    Content="حفظ"
+                    Command="{Binding categoryViewModel.SaveCommand}">
+
+            </Button>
+        </Grid>
+        <TextBlock Grid.Row="1" Width="100" Margin="10"
+                   Height="20" HorizontalAlignment="Left"
+                   Text="اسم المجموعة"/>
+        <TextBox Grid.Row="1" Width="200" Height="20"
+                 HorizontalAlignment="Left"
+                 Margin="120,0,0,0"
+                 Text="{Binding categoryViewModel.CategoryName}"/>
+        <ListView x:Name="listView"  Grid.Row="2"
+                                  Margin="5,0,300,0"
+                                  VerticalAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  ItemsSource="{Binding categoryViewModel.CategoryTable.DefaultView}"
+                                  ScrollViewer.CanContentScroll="False"
+                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  >
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction
+                                        Command="{Binding categoryViewModel.SelectionChangedListViewCommand}"
+                                        CommandParameter="{Binding ElementName=listView}">
+                    </i:InvokeCommandAction>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn x:Name="ID" Header="رقم الحساب" Width="270"
+                                    
+                                                    DisplayMemberBinding="{Binding ID}"/>
+                    
+                    <GridViewColumn Header="اسم الحساب" Width="400"
+                                                    DisplayMemberBinding="{Binding Name}"/>
+                    
+
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <!--UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/-->
+
+    </Grid>
+</UserControl>

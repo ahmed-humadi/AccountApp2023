@@ -1,0 +1,565 @@
+﻿<Window x:Class="AccountingAppMainWind.Views.AccountsWinView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:UC ="clr-namespace:AccountApp2023.CustUserCont"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib" 
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AccountingAppMainWind.Views"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+
+        mc:Ignorable="d" FlowDirection="RightToLeft" 
+        WindowStartupLocation="CenterScreen"
+        Title="AccountsWinView" Height="600" Width="900">
+
+    <Window.Resources>
+
+        <SolidColorBrush x:Key="ProgressBar.Progress" Color="#FF06B025"/>
+        <SolidColorBrush x:Key="ProgressBar.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="ProgressBar.Border" Color="#FFBCBCBC"/>
+        <Style x:Key="ProgressBarStyle1" TargetType="{x:Type ProgressBar}">
+            <Setter Property="Foreground" Value="{StaticResource ProgressBar.Progress}"/>
+            <Setter Property="Background" Value="{StaticResource ProgressBar.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ProgressBar.Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ProgressBar}">
+                        <Grid x:Name="TemplateRoot">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Determinate"/>
+                                    <VisualState x:Name="Indeterminate">
+                                        <Storyboard RepeatBehavior="Forever">
+                                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                                                <EasingDoubleKeyFrame KeyTime="0" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:1" Value="0.25"/>
+                                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.25"/>
+                                            </DoubleAnimationUsingKeyFrames>
+                                            <PointAnimationUsingKeyFrames Storyboard.TargetName="Animation" Storyboard.TargetProperty="(UIElement.RenderTransformOrigin)">
+                                                <EasingPointKeyFrame KeyTime="0" Value="-0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:1" Value="0.5,0.5"/>
+                                                <EasingPointKeyFrame KeyTime="0:0:2" Value="1.5,0.5"/>
+                                            </PointAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                            <Ellipse x:Name="PART_Track">
+                            </Ellipse>
+                            <Grid x:Name="PART_Indicator" ClipToBounds="true" HorizontalAlignment="Left">
+                                <Rectangle x:Name="Indicator" Fill="{TemplateBinding Foreground}"/>
+                                <Rectangle x:Name="Animation" Fill="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                                    <Rectangle.RenderTransform>
+                                        <TransformGroup>
+                                            <ScaleTransform/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Rectangle.RenderTransform>
+                                </Rectangle>
+                            </Grid>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Orientation" Value="Vertical">
+                                <Setter Property="LayoutTransform" TargetName="TemplateRoot">
+                                    <Setter.Value>
+                                        <RotateTransform Angle="-90"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsIndeterminate" Value="true">
+                                <Setter Property="Visibility" TargetName="Indicator" Value="Collapsed"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TabControl>
+            <!--صفحة دليل الحسابات -->
+            <!-- this is the view of accounttable -->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xEC06; " 
+                                           FontFamily="Segoe MDL2 Assets" Height="13" Width="19" />
+                        <TextBlock Text="دليل الحسابات"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0">
+                        <MenuItem Command="{Binding AccountsGuideViewModel.ShowAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="أستعراض الحسابات"/>
+                                    <TextBlock Text="&#xE160;"  
+                                   FontFamily="Segoe MDL2 Assets"
+                                               Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="AllAccountInsert" Command="{Binding AccountsGuideViewModel.InsertAccountCommand, Mode=OneTime}"
+                                  >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ادراج  "/>
+                                    <TextBlock FontSize="12" Text="&#xE1FD;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="AllAccountMod" Command="{Binding AccountsGuideViewModel.ModifyAccountCommand, Mode=OneTime}"
+                                  >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="تعديل  "/>
+                                    <TextBlock FontSize="12" Text="&#xE2B3;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Command="{Binding AccountsGuideViewModel.SaveAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="حفظ  "/>
+                                    <TextBlock FontSize="12" Text="&#xE105;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="44"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition Width="105"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Column="0" Grid.ColumnSpan="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Grid.Row="0" Grid.Column="0" 
+                                   Text="اسم الحساب" Margin="5"/>
+                            <TextBox x:Name="AccountName_txtBx" Grid.Row="0" Grid.Column="1"
+                                 Width="200" Height="23" Margin="5"
+                                Text="{Binding AccountsGuideViewModel.AccountName, Mode=TwoWay}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="TextChanged">
+                                        <i:InvokeCommandAction Command="{Binding AccountsGuideViewModel.AccountNameTextChangCommand}"
+                                                               CommandParameter="{Binding ElementName=AccountName_txtBx}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </TextBox>
+                            <TextBlock Grid.Row="1" Grid.Column="0" 
+                                   Text="رمز الحساب" Margin="5"/>
+                            <TextBox Grid.Row="1" Grid.Column="1"
+                                 Width="200" Height="23" Margin="5"
+                                     x:Name="AccountCode_txtBx" 
+                                     Text="{Binding AccountsGuideViewModel.AccountCode}"
+                                     IsEnabled="False"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" 
+                                   Text="الحساب الرئيسي" Margin="5"/>
+                            <ComboBox x:Name="MainAccount_ComboBox" Grid.Row="2" Grid.Column="1"
+                                      Width="200" Height="23" Margin="5"
+                                      IsEditable="True" 
+                                       Text="{Binding AccountsGuideViewModel.AccountParent}"
+                                SelectedItem="{Binding AccountsGuideViewModel.AccountParent}">
+
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownOpened">
+                                        <i:InvokeCommandAction Command="{Binding AccountsGuideViewModel.ShowAllAccountsCommand}"
+                                                               CommandParameter="{Binding ElementName=MainAccount_ComboBox}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="KeyDown">
+                                        <i:InvokeCommandAction Command="{Binding AccountsGuideViewModel.SearchAccountsCommand}"
+                                                               CommandParameter="{Binding ElementName=MainAccount_ComboBox}"/>
+                                    </i:EventTrigger>
+                                    <i:EventTrigger EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding AccountsGuideViewModel.GetAccountCodeCommand, Mode=OneWay}"
+                                                               CommandParameter="{Binding ElementName=MainAccount_ComboBox}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+
+                            </ComboBox>
+                            <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="الحساب الختامي" Margin="5"/>
+                            <ComboBox x:Name="EndAccounts_ComboBx" Grid.Row="3" Grid.Column="1"
+                                      IsEditable="True" Height="23"
+                                        Width="200"  Margin="5"
+                                      Text="{Binding AccountsGuideViewModel.AccountEndAccount}"
+
+                                SelectedItem="{Binding AccountsGuideViewModel.AccountEndAccount}">
+
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="DropDownOpened">
+                                        <i:InvokeCommandAction Command="{Binding EndAccountsViewModel.ShowAccountCommand}"
+                                                               CommandParameter="{Binding ElementName=EndAccounts_ComboBx}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                            </ComboBox>
+                            <TextBlock Grid.Row="4" Grid.Column="0" 
+                                   Text="التاريــــــــــخ" Margin="5"/>
+                            <DatePicker Name="Accounts_datePicker" Grid.Row="4" Grid.Column="1" 
+                                    Margin="5"
+                                    SelectedDate="{Binding Mode=OneWay,  
+                                Source={x:Static sys:DateTime.Now}, 
+                                StringFormat=yyyy/MM/dd}" SelectedDateFormat="Short" Width="200"
+                                        Text="{Binding AccountsGuideViewModel.Accounts.AccountModDate,Mode=OneWayToSource}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="0" 
+                                   Text="الملاحظات" Margin="5"/>
+                            <TextBox Grid.Row="5" Grid.Column="1"
+                                 Width="200" Margin="5,5,5,-62"
+                                     TextWrapping="Wrap"
+                                     AcceptsReturn="True"
+                                     VerticalScrollBarVisibility="Auto"/>
+                        </Grid>
+
+                        <UC:MyTreeView x:Name="Accounts_TreeView" Grid.Column="4" Height="250"
+                                  Margin="5">
+                            <TreeView.Resources>
+                                <Style TargetType="TreeViewItem">
+                                    <Setter Property="UC:MyTreeView.ExpandingBehaviour" Value="{Binding AccountsGuideViewModel.ExpandTreeViewCommand}"/>
+                                    <Setter Property="UC:MyTreeView.CollapsingBehaviour" Value="{Binding AccountsGuideViewModel.CollapseTreeViewCommand}"/>
+                                    <Setter Property="UC:MyTreeView.SelectingBehaviour" Value="{Binding AccountsGuideViewModel.AccountsTreeViewSelectionChangedCommand}"/>
+
+                                </Style>
+                            </TreeView.Resources>
+
+                            <TreeViewItem x:Name="item">
+                                <TreeViewItem.Header>
+                                    <TextBlock Text="دليل الحسابات"/>
+                                </TreeViewItem.Header>
+                                <TreeViewItem.Tag>
+                                    0
+                                </TreeViewItem.Tag>
+                                <TreeViewItem/>
+                            </TreeViewItem>
+                        </UC:MyTreeView>
+                    </Grid>
+                    <Grid Grid.Row="2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderBrush="Black" 
+                                BorderThickness="1" Margin="5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           Margin="5"
+                                           Text="بحث باسم الحساب"/>
+                                <TextBox x:Name="SearchByAccountName" Grid.Column="1" Width="200" Height="23" Margin="5"
+                                         >
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="TextChanged">
+                                            <i:InvokeCommandAction
+                                                Command="{Binding AccountsGuideViewModel.TextChangedSearchByNameCommand}"
+                                                CommandParameter="{Binding ElementName=SearchByAccountName,Path=Text}">
+                                            </i:InvokeCommandAction>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </TextBox>
+                                <TextBlock Grid.Column="2" 
+                                           Margin="5"
+                                           Text="بحث باسم الحساب الرئيسي"/>
+                                <TextBox Grid.Column="3"
+                                         Width="200"
+                                         Height="23"
+                                         Margin="5"/>
+                            </Grid>
+                        </Border>
+
+                        <ListView x:Name="listView"  Grid.Row="1" Height="115"
+                                  Margin="5"
+                                  VerticalAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  ItemsSource="{Binding AccountsGuideViewModel.AccountTable.DefaultView}"
+                                  ScrollViewer.CanContentScroll="True"
+                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  SelectedItem="{Binding AccountsGuideViewModel.ListViewSelectedItem}">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="SelectionChanged">
+                                    <i:InvokeCommandAction
+                                        Command="{Binding AccountsGuideViewModel.SelectionChangedListViewCommand}"
+                                        CommandParameter="{Binding ElementName=listView}">
+                                    </i:InvokeCommandAction>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn x:Name="ID" Header="رقم الحساب" Width="100"
+                                                    DisplayMemberBinding="{Binding ID}"/>
+                                    <GridViewColumn Header="رمز الحساب" Width="100" 
+                                                    DisplayMemberBinding="{Binding Code}"/>
+                                    <GridViewColumn Header="اسم الحساب" Width="200"
+                                                    DisplayMemberBinding="{Binding Name}"/>
+                                    <GridViewColumn Header="الحساب الرئيسي" Width="200"
+                                                    DisplayMemberBinding="{Binding ParentID}"/>
+                                    <GridViewColumn Header="الحساب الختامي" Width="200"
+                                                    DisplayMemberBinding="{Binding EndAccountID}"/>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <!-- end of account table view -->
+            <!--صفحة الحسابات الرئيسية-->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xEC06; " 
+                                           FontFamily="Segoe MDL2 Assets" Height="13" Width="19" />
+                        <TextBlock Text="الحسابات الرئيسية"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0">
+                        <MenuItem Command="{Binding MainAccountsViewModel.ShowAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="استعراض الحسابات"/>
+                                    <TextBlock Text="&#xE160;"  
+                                   FontFamily="Segoe MDL2 Assets"
+                                               Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="MainAccountInsert" Command="{Binding MainAccountsViewModel.InsertAccountCommand, Mode=OneTime}" >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ادراج  "/>
+                                    <TextBlock FontSize="12" Text="&#xE1FD;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="MainAccountMod" Command="{Binding MainAccountsViewModel.ModifyAccountCommand, Mode=OneTime}" >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="تعديل  "/>
+                                    <TextBlock FontSize="12" Text="&#xE2B3;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Command="{Binding MainAccountsViewModel.SaveAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="حفظ  "/>
+                                    <TextBlock FontSize="12" Text="&#xE105;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
+                    <Grid Grid.Row="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" 
+                                           Text="اسم الحساب" Margin="5"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Focusable="True"
+                                         x:Name="MainAccountName_txtBx" 
+                                         Width="200" Height="23" Margin="5"
+                                     Text="{Binding MainAccountsViewModel.MainAccount.AccountName,
+                            UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0"
+                                   Text="الحساب الختامي" Margin="4"/>
+                        <ComboBox x:Name="MainAccountEndAccounts_ComboBx" Grid.Row="1" Grid.Column="1"
+                                  Width="200" Height="23" Margin="5"
+                                  IsEditable="True"
+                                  Text="{Binding MainAccountsViewModel.EndAccountsCmbBx_TextProperty,
+                            Mode=OneWayToSource,UpdateSourceTrigger=PropertyChanged}"
+                                  ItemsSource="{Binding MainAccountsViewModel.EndAccountsList,Mode=OneWay}"
+                                  DisplayMemberPath="EndAccountName"
+                                  SelectedItem="{Binding MainAccountsViewModel.SelectedEndAccount,
+                            UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+                        <TextBlock Grid.Row="2" Grid.Column="0"
+                                   Text="رمــز الحساب" Margin="5"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" 
+                                 x:Name="MainAccountCode_txtBx" 
+                                 Width="200" Height="23" Margin="5"
+                                     Text="{Binding MainAccountsViewModel.MainAccount.AccountCode,
+                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="0" 
+                                   Text="التاريـــــــــــــــخ" Margin="5"/>
+                        <DatePicker Name="mainAccount_datePicker" Grid.Row="3" Grid.Column="1" 
+                                    Margin="5"
+                                    SelectedDate="{Binding Mode=OneWay,  
+                                Source={x:Static sys:DateTime.Now}, 
+                                StringFormat=yyyy/MM/dd}" SelectedDateFormat="Short" Width="200"
+                                        Text="{Binding MainAccountsViewModel.MainAccount.AccountModDate,Mode=OneWayToSource}"/>
+                    </Grid>
+                    <ListView Grid.Row="2" HorizontalAlignment="Left"
+                              Height="250" Margin="5" ItemsSource="{Binding MainAccountsViewModel.MainAccountsTable.DefaultView}"
+                              SelectedItem="{Binding MainAccountsViewModel.SelectedMainAccount}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="رمز الحساب" DisplayMemberBinding="{Binding AccountCode}" Width="200"/>
+                                <GridViewColumn Header="اسم الحساب" Width="200" DisplayMemberBinding="{Binding AccountName}"/>
+                                <GridViewColumn Header="تاريخ التعديل" Width="200" DisplayMemberBinding="{Binding AccountModDate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </TabItem>
+            <!--صفحة الحسابات الختامية-->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xEC06; " 
+                                           FontFamily="Segoe MDL2 Assets" Height="13" Width="19" />
+                        <TextBlock Text="الحسابات الختامية"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="289*"/>
+                        <ColumnDefinition Width="497*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,18">
+                        <MenuItem Command="{Binding EndAccountsViewModel.ShowAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="استعراض الحسابات"/>
+                                    <TextBlock Text="&#xE160;"  
+                                   FontFamily="Segoe MDL2 Assets"
+                                               Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="EndAccountInsert" Command="{Binding EndAccountsViewModel.InsertAccountCommand, Mode=OneTime}"
+                                 >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ادراج  "/>
+                                    <TextBlock FontSize="12" Text="&#xE1FD;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem x:Name="EndAccountMod" Command="{Binding EndAccountsViewModel.ModifyAccountCommand, Mode=OneTime}"
+                                  >
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="تعديل  "/>
+                                    <TextBlock FontSize="12" Text="&#xE2B3;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                        <MenuItem Command="{Binding EndAccountsViewModel.SaveAccountCommand, Mode=OneTime}">
+                            <MenuItem.Header>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="حفظ  "/>
+                                    <TextBlock FontSize="12" Text="&#xE105;"  
+                                   FontFamily="Segoe MDL2 Assets" Height="13"/>
+                                </StackPanel>
+                            </MenuItem.Header>
+                        </MenuItem>
+                    </Menu>
+                    <StackPanel Orientation="Vertical" Grid.ColumnSpan="2" Margin="0,18" Grid.RowSpan="2" >
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="اسم الحساب" Margin="0,0,5,0"/>
+                            <TextBox x:Name="EndAccountName_txtBx" Width="200" Height="23"
+                                     Text="{Binding EndAccountsViewModel.EndAccount.EndAccountName}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="رمــز الحساب" Margin="0,0,5,0"/>
+                            <TextBox x:Name="EndAccountCode_txtBx" Width="200" Height="23"
+                                     Text="{Binding EndAccountsViewModel.EndAccount.EndAccountCode}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <TextBlock Text="التاريـــــــــــــــخ" Margin="0,0,5,0"/>
+                            <DatePicker Name="EndAccountDatePicker" SelectedDate="{Binding Mode=OneWay, 
+                                Source={x:Static sys:DateTime.Now}, 
+                                StringFormat=yyyy/MM/dd}" SelectedDateFormat="Short" Width="200"
+                                        Text="{Binding EndAccountsViewModel.EndAccount.EndAccountModDate,Mode=OneWayToSource}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <!--ListView x:Name="EndAccounts_list"  Grid.Row="1" ItemsSource="{Binding EndAccountsViewModel.EndAccountsTable.DefaultView}"
+                              SelectedItem="{Binding EndAccountsViewModel.SelectedEndAccount,Mode=OneWayToSource}"
+                              Margin="0,82,0,18"
+                              HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="رمز الحساب" Width="200" DisplayMemberBinding="{Binding EndAccountCode}"/>
+                                <GridViewColumn Header="اسم الحساب"  Width="200" DisplayMemberBinding="{Binding EndAccountName}"/>
+                                <GridViewColumn Header="تاريخ التعديل"  Width="200" DisplayMemberBinding="{Binding EndAccountModDate}"/>
+                            </GridView>
+                        </ListView.View>
+                    </ListView-->
+                </Grid>
+            </TabItem>
+            <!--صفحة التقارير-->
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xEADF; " 
+                                           FontFamily="Segoe MDL2 Assets" Height="13" Width="19" />
+                        <TextBlock Text="التقارير"/>
+                    </StackPanel>
+                </TabItem.Header>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

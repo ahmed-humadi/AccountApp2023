@@ -135,7 +135,11 @@ namespace AccountApp2023
         private void ShowCatogryTableView(TabItem tabItem)
         {
 
-            tabItem.Content = new CategoryView();
+            Grid grid = new Grid();
+            grid.Children.Clear();
+            grid.Children.Add(new CategoryView());
+            grid.Margin = new Thickness(50);
+            tabItem.Content = grid;
         }
         private void SideMenuItem_Click1(object sender, RoutedEventArgs e)
         {

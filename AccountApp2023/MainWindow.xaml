@@ -314,6 +314,7 @@
                 <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
+ 
             <Menu x:Name="SideMenu" Grid.Column="0" FontSize="16">
                 <Menu.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -445,6 +446,11 @@
                                 <TextBlock Text="الصفحة الرئيسية"/>
                             </StackPanel>
                         </TabItem.Header>
+                        <TabItem.Content>
+                            <Grid Margin="50">
+                                
+                            </Grid>
+                        </TabItem.Content>
                     </TabItem>
                 </TabControl>
             </Grid>

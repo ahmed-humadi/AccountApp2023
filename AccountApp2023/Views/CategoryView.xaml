@@ -7,8 +7,8 @@
              mc:Ignorable="d" 
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:UC ="clr-namespace:AccountApp2023.CustUserCont"
-             d:DesignHeight="600" d:DesignWidth="1000" FlowDirection="RightToLeft"
-              >
+             d:DesignHeight="400" d:DesignWidth="1000" FlowDirection="RightToLeft"
+              Background="Transparent">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded">
@@ -16,8 +16,9 @@
                 Command="{Binding categoryViewModel.LoadedCategoryViewCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-
-    <Grid Background="White">
+    <Border BorderBrush="WhiteSmoke" BorderThickness="2" CornerRadius='10'
+            Background="White">
+        <Grid Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition x:Name="menu" Height="25"/>
             <RowDefinition x:Name="flieds" Height="60"/>
@@ -31,6 +32,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0"
+                    Background="Transparent"
                     Content="ادراج"
                     Style="{StaticResource buttonsStyle}"
                     Command="{Binding categoryViewModel.InsertCommand}">
@@ -57,7 +59,7 @@
                  Margin="120,0,0,0"
                  Text="{Binding categoryViewModel.CategoryName}"/>
         <ListView x:Name="listView"  Grid.Row="2"
-                                  Margin="5,0,465,0"
+                                  Margin="5,0,10,10"
                                   VerticalAlignment="Stretch"
                                   VerticalContentAlignment="Stretch"
                                   ItemsSource="{Binding categoryViewModel.CategoryTable.DefaultView}"
@@ -89,4 +91,5 @@
         <UC:Loading IsLoading="{Binding categoryViewModel.IsLoading}" Grid.RowSpan="4"/>
 
     </Grid>
+    </Border>
 </UserControl>

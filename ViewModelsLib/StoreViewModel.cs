@@ -63,10 +63,10 @@ namespace ViewModelsLib
         private bool isEditing;
         public bool IsEditing
         {
-            get => isSvaing;
+            get => isEditing;
             set
             {
-                SetProperty(ref isSvaing, value);
+                SetProperty(ref isEditing, value);
                 ((DelegateCommand)ModCommand).RaiseCanExecuteChanged();
             }
         }

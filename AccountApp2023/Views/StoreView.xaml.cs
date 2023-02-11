@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ViewModelsLib;
+
 
 namespace AccountApp2023.Views
 {
@@ -20,6 +22,8 @@ namespace AccountApp2023.Views
     /// </summary>
     public partial class StoreView : UserControl
     {
+
+        public StoreViewModel StoreViewModel { get; set; }
         public StoreView()
         {
             InitializeComponent();

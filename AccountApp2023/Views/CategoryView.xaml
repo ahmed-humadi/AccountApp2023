@@ -62,7 +62,7 @@
                                   VerticalContentAlignment="Stretch"
                                   ItemsSource="{Binding categoryViewModel.CategoryTable.DefaultView}"
                                   ScrollViewer.CanContentScroll="False"
-                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
                                   >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -74,11 +74,11 @@
             </i:Interaction.Triggers>
             <ListView.View>
                 <GridView>
-                    <GridViewColumn x:Name="ID" Header="رقم الحساب" Width="270"
+                    <GridViewColumn x:Name="ID" Header="رقم المجموعة" Width="270"
                                     
                                                     DisplayMemberBinding="{Binding ID}"/>
                     
-                    <GridViewColumn Header="اسم الحساب" Width="400"
+                    <GridViewColumn Header="اسم المجموعة" Width="400"
                                                     DisplayMemberBinding="{Binding Name}"/>
                     
 

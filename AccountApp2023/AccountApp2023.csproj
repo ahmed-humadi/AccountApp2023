@@ -162,6 +162,10 @@
       <Project>{d465d713-f85b-4177-9244-924046dafadd}</Project>
       <Name>BusinessLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DataEntitiesLib\DataEntitiesLib.csproj">
+      <Project>{24e763ca-aeed-4fc4-bc2b-9b6da72f7bba}</Project>
+      <Name>DataEntitiesLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FrameWorkLib\FrameWorkLib.csproj">
       <Project>{667833d8-e53c-49ad-9615-7befd15779d2}</Project>
       <Name>FrameWorkLib</Name>

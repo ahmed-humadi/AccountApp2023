@@ -73,7 +73,7 @@ namespace ViewModelsLib
         public ICommand SaveCommand { get; set; }
         public ICommand ModCommand { get; set; }
         public ICommand InsertCommand { get; set; }
-        public ICommand LoadedCategoryViewCommand { get; set; }
+        public ICommand LoadedStoreViewCommand { get; set; }
         public ICommand SelectionChangedListViewCommand { get; set; }
         public StoreViewModel()
         {
@@ -81,7 +81,7 @@ namespace ViewModelsLib
 
             SaveCommand = new DelegateCommand(Save, () => IsSaving);
             ModCommand = new DelegateCommand(Modify, () => IsEditing);
-            LoadedCategoryViewCommand = new DelegateCommand(LoadedCategoryView);
+            LoadedStoreViewCommand = new DelegateCommand(LoadedStoreView);
             SelectionChangedListViewCommand = new DelegateCommand(SelectionChangedListView);
         }
 
@@ -101,7 +101,7 @@ namespace ViewModelsLib
             }
         }
 
-        private void LoadedCategoryView()
+        private void LoadedStoreView()
         {
             try
             {
@@ -132,7 +132,6 @@ namespace ViewModelsLib
 
             }
         }
-
         private void Save()
         {
             throw new NotImplementedException();

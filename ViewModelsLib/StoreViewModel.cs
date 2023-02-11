@@ -15,7 +15,7 @@ namespace ViewModelsLib
     {
         private readonly object lockToken = new object();
 
-        private StoreModel storeModel;
+        private StoreTableModel storeModel;
 
         private StoreTable storeTable;
         public StoreTable StoreTable
@@ -77,7 +77,7 @@ namespace ViewModelsLib
         public ICommand SelectionChangedListViewCommand { get; set; }
         public StoreViewModel()
         {
-            storeModel = new StoreModel(); 
+            storeModel = new StoreTableModel(); 
 
             SaveCommand = new DelegateCommand(Save, () => IsSaving);
             ModCommand = new DelegateCommand(Modify, () => IsEditing);

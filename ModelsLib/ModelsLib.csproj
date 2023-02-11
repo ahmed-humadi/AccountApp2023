@@ -46,7 +46,7 @@
     <Compile Include="DayTableModel.cs" />
     <Compile Include="EndAccountsTableModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StoreModel.cs" />
+    <Compile Include="StoreTableModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BusinessLib\BusinessLib.csproj">
